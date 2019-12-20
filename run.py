@@ -12,10 +12,10 @@ if __name__ == '__main__':
     if args.case:
         print("run the case")
         #testcase_Parse.gettestcaseList("single", args.case[0])
-        testcase_Run.run_testCase(args.case[0])
+        testcase_Run.run_testCase(args.case[0], args.curan[0])
     elif args.all_case:
         print("run all cases")
-        testcase_Run.run_testCase("all_case")
+        testcase_Run.run_testCase("all_case", args.curan[0])
     elif args.analyze:
         print("analyze the log")
 
