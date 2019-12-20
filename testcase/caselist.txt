@@ -38,22 +38,22 @@ cuPHY/build/examples/error_correction/cuphy_ex_ldpc -i ./testVectors/ldpc_BG1_K8
 cuPHY/build/examples/error_correction/cuphy_ex_ldpc -i ./testVectors/ldpc_BG1_K8448_SNR10_104.h5 -r 100 -p 46 -n 10 -w 80
 
 
-#####cuPHY PDSCH_tx pipeline
+#####cuPHY_PDSCH_tx pipeline : cuPHY PDSCH_tx pipeline
 cuPHY/build/examples/pdsch_tx/cuphy_ex_pdsch_tx  ./testVectors/dl_pipeline.h5
 
-#####cuPHY PUSCH rx pipeline: MIMO1x8
+#####cuPHY_PUSCH_rx_pipeline: MIMO1x8
 sudo cuPHY/build/examples/pusch_rx_multi_pipe/cuphy_ex_pusch_rx_multi_pipe -i ./testVectors/TV_cuphy_pusch-TC3_snrdb40.00_iter1_MIMO1x8_PRB272_DataSyms9_qam64.h5
 sudo cuPHY/build/examples/pusch_rx_multi_pipe/cuphy_ex_pusch_rx_multi_pipe -i ./testVectors/TV_cuphy_pusch-TC6_snrdb40.00_iter1_MIMO1x8_PRB272_DataSyms9_qam16.h5
 sudo cuPHY/build/examples/pusch_rx_multi_pipe/cuphy_ex_pusch_rx_multi_pipe -i ./testVectors/TV_cuphy_pusch-TC13_snrdb40.00_iter1_MIMO1x8_PRB272_DataSyms9_qam4.h5
 sudo cuPHY/build/examples/pusch_rx_multi_pipe/cuphy_ex_pusch_rx_multi_pipe -i ./testVectors/TV_cuphy_pusch-TC16_snrdb40.00_iter1_MIMO1x8_PRB272_DataSyms9_qam256.h5
 
-#####cuPHY PUSCH rx pipeline: MIMO4x8
+#####cuPHY_PUSCH_rx_pipeline: MIMO4x8
 sudo cuPHY/build/examples/pusch_rx_multi_pipe/cuphy_ex_pusch_rx_multi_pipe -i ./testVectors/TV_cuphy_pusch-TC1_snrdb40.00_iter1_MIMO4x8_PRB272_DataSyms9_qam64.h5
 sudo cuPHY/build/examples/pusch_rx_multi_pipe/cuphy_ex_pusch_rx_multi_pipe -i ./testVectors/TV_cuphy_pusch-TC4_snrdb40.00_iter1_MIMO4x8_PRB272_DataSyms9_qam16.h5
 sudo cuPHY/build/examples/pusch_rx_multi_pipe/cuphy_ex_pusch_rx_multi_pipe -i ./testVectors/TV_cuphy_pusch-TC11_snrdb40.00_iter1_MIMO4x8_PRB272_DataSyms9_qam4.h5
 sudo cuPHY/build/examples/pusch_rx_multi_pipe/cuphy_ex_pusch_rx_multi_pipe -i ./testVectors/TV_cuphy_pusch-TC14_snrdb40.00_iter1_MIMO4x8_PRB272_DataSyms9_qam256.h5
 
-#####cuPHY PUSCH rx pipeline: MIMO2x8
+#####cuPHY_PUSCH_rx_pipeline: MIMO2x8
 sudo cuPHY/build/examples/pusch_rx_multi_pipe/cuphy_ex_pusch_rx_multi_pipe -i ./testVectors/TV_cuphy_pusch-TC2_snrdb40.00_iter1_MIMO2x8_PRB272_DataSyms9_qam64.h5
 sudo cuPHY/build/examples/pusch_rx_multi_pipe/cuphy_ex_pusch_rx_multi_pipe -i ./testVectors/TV_cuphy_pusch-TC5_snrdb40.00_iter1_MIMO2x8_PRB272_DataSyms9_qam16.h5
 sudo cuPHY/build/examples/pusch_rx_multi_pipe/cuphy_ex_pusch_rx_multi_pipe -i ./testVectors/TV_cuphy_pusch-TC7_snrdb40.00_iter1_MIMO2x8_PRB48_DataSyms9_qam64.h5
@@ -88,7 +88,7 @@ cuPHY/build/examples/error_correction/cuphy_ex_ldpc -i ./testVectors/ldpc_BG2_K8
 
 
 
-#####cuPHY PUCCH - Format 1 complete : cuPHY_PUCCH-Format_1_complete
+#####cuPHY_PUCCH-Format_1_complete : cuPHY_PUCCH-Format_1_complete
 cuPHY/build/examples/pucch_receiver/pucch_receiver ./testVectors/last_TC1_pucch.h5 100
 cuPHY/build/examples/pucch_receiver/pucch_receiver ./testVectors/last_TC2_pucch.h5 100
 cuPHY/build/examples/pucch_receiver/pucch_receiver ./testVectors/last_TC3_pucch.h5 100
@@ -96,10 +96,10 @@ cuPHY/build/examples/pucch_receiver/pucch_receiver ./testVectors/last_TC4_pucch.
 cuPHY/build/examples/pucch_receiver/pucch_receiver ./testVectors/last_TC5_pucch.h5 100
 cuPHY/build/examples/pucch_receiver/pucch_receiver ./testVectors/last_TC6_pucch.h5 100
 
-#####cuPHY PDSCH - pipeline integration : cuPHY_PDSCH-pipeline_integration
+#####cuPHY_PDSCH-pipeline_integration : cuPHY_PDSCH-pipeline_integration
 cuPHY/build/examples/pdsch_tx/cuphy_ex_pdsch_tx ./testVectors/TV_cuphy_pdsch-default_snrdb40.00_iter1_MIMO8x8_PRB272_DataSyms12_qam256.h5  100
 
-#####cuPHY PDSCH Modulation (symbol mapping) : cuPHY_PDSCH_Modulation(symbol_mapping) 
+#####cuPHY_PDSCH_Modulation(symbol_mapping) : cuPHY_PDSCH_Modulation(symbol_mapping) 
 cuPHY/build/examples/modulation_mapper/modulation_mapper ./testVectors/TV_cuphy_pdsch-default_snrdb40.00_iter1_MIMO8x8_PRB272_DataSyms12_qam256.h5 100
 
 #####cuPHY PUSCH Multi-TB support : cuPHY_PUSCH_Multi-TB_support
@@ -115,11 +115,11 @@ sudo cuPHY/build/examples/pusch_rx_multi_pipe/cuphy_ex_pusch_rx_multi_pipe -i ./
 sudo cuPHY/build/examples/pusch_rx_multi_pipe/cuphy_ex_pusch_rx_multi_pipe -i ./testVectors/TV_cuphy_perf-pusch-TC284_snrdb40.00_iter1_MIMO8x16_PRB272_DataSyms10_qam64.h5
 sudo cuPHY/build/examples/pusch_rx_multi_pipe/cuphy_ex_pusch_rx_multi_pipe -i ./testVectors/TV_cuphy_perf-pusch-TC285_snrdb40.00_iter1_MIMO8x16_PRB272_DataSyms10_qam16.h5
 
-#####cuPHY PUSCH LDPC support multiple code rates including HARQ rate
+#####cuPHY_PUSCH_LDPC_support_multiple_code_rates_including_HARQ_rate : cuPHY_PUSCH_LDPC_support_multiple_code_rates_including_HARQ_rate
 #cuPHY/build/examples/error_correction/cuphy_ex_ldpc -i ${input_file} -n 10 -r 100 -p ${parity_node_number}
 #cuPHY/build/examples/error_correction/cuphy_ex_ldpc -i ${input_file} -n 10 -g 2 -r 100 -p ${parity_node_number}
 
-#####cuPHY PUSCH LDPC supported code block sizes and BG1 + BG2
+#####cuPHY_PUSCH_LDPC_supported_code_block_sizes_and_BG1_+_BG2 : cuPHY_PUSCH_LDPC_supported_code_block_sizes_and_BG1_+_BG2
 cuPHY/build/examples/error_correction/cuphy_ex_ldpc -i ./testVectors/ldpc_BG1_K1408_SNR7_80_p_m.h5 -n 10 -p 8 -r 100
 cuPHY/build/examples/error_correction/cuphy_ex_ldpc -i ./testVectors/ldpc_BG1_K2112_SNR7_80_p_m.h5 -n 10 -p 8 -r 100
 cuPHY/build/examples/error_correction/cuphy_ex_ldpc -i ./testVectors/ldpc_BG1_K2816_SNR7_80_p_m.h5 -n 10 -p 8 -r 100
