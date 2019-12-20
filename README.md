@@ -1,1 +1,1 @@
-# cuPHY_Auto
+Auto
