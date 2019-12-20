@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 import os
 
-testcaseFileName = 'testcase\\caselist.txt'
+testcaseFileName = 'cuPHY_Auto/testcase/caselist.txt'
 currenWorkPath = os.getcwd()
 
 testcaseFile_path = os.path.join(currenWorkPath, testcaseFileName)
