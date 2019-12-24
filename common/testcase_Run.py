@@ -16,6 +16,7 @@ def runSinglecase(caseCmds, curan_path, arguementList):
     logname = caseCmds[0].strip().replace('\n', '').strip().split(':')[-1].strip()
     logname = '-'.join([logname, getcurrDate()])
 
+    createFolder('logs')
     tempfile = 'log.txt'
 
     if arguementList.duration == 0:
