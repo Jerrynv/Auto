@@ -121,4 +121,3 @@ def seperateTestcase(allcases):
 
 def getcurrDate():
     return datetime.datetime.now().strftime('%Y-%m-%d-%H:%M:%S')  
-

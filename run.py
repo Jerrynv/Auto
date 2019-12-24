@@ -11,7 +11,6 @@ if __name__ == '__main__':
 
     if args.case:
         print("run the case")
-
         testcase_Run.run_testCase(args.case[0], args.curan[0], args)
     elif args.all_case:
         print("run all cases")

@@ -1,28 +1,28 @@
 """
 suite: testcase
 """
-#####cuPHY LDPC Error Correction: SNR10_104codewords_SinglePrecision
+#####cuPHY_LDPC_Error_Correction: SNR10_104codewords_SinglePrecision
 cuPHY/build/examples/error_correction/cuphy_ex_ldpc -i ./testVectors/ldpc_BG1_K8448_SNR10_104.h5 -p 4 -n 10 -x 1
 
-#####cuPHY LDPC Error Correction: SNR10_104codewords_HalfPrecision
+#####cuPHY_LDPC_Error_Correction: SNR10_104codewords_HalfPrecision
 cuPHY/build/examples/error_correction/cuphy_ex_ldpc -i ./testVectors/ldpc_BG1_K8448_SNR10_104.h5 -p 4 -n 10 -x 1 -f
 
-#####cuPHY LDPC Error Correction: SNR7_1codewords_SinglePrecision
+#####cuPHY_LDPC_Error_Correction: SNR7_1codewords_SinglePrecision
 cuPHY/build/examples/error_correction/cuphy_ex_ldpc -i ./testVectors/ldpc_BG1_K8448_SNR7_1.h5 -p 4 -n 10 -x 1
 
-#####cuPHY LDPC Error Correction: SNR7_1codewords_HalfPrecision
+#####cuPHY_LDPC_Error_Correction: SNR7_1codewords_HalfPrecision
 cuPHY/build/examples/error_correction/cuphy_ex_ldpc -i ./testVectors/ldpc_BG1_K8448_SNR7_1.h5 -p 4 -n 10 -x 1 -f
 
-#####cuPHY LDPC Error Correction: SNR7_40codewords_SinglePrecision
+#####cuPHY_LDPC_Error_Correction: SNR7_40codewords_SinglePrecision
 cuPHY/build/examples/error_correction/cuphy_ex_ldpc -i ./testVectors/ldpc_BG1_K8448_SNR7_40.h5 -p 4 -n 10 -x 1
 
-#####cuPHY LDPC Error Correction: SNR7_40codewords_HalfPrecision
+#####cuPHY_LDPC_Error_Correction: SNR7_40codewords_HalfPrecision
 cuPHY/build/examples/error_correction/cuphy_ex_ldpc -i ./testVectors/ldpc_BG1_K8448_SNR7_40.h5 -p 4 -n 10 -x 1 -f
 
-#####cuPHY LDPC Error Correction: SNR7_80codewords_SinglePrecision
+#####cuPHY_LDPC_Error_Correction: SNR7_80codewords_SinglePrecision
 cuPHY/build/examples/error_correction/cuphy_ex_ldpc -i ./testVectors/ldpc_BG1_K8448_SNR7_80.h5 -p 4 -n 10 -x 1
 
-#####cuPHY LDPC Error Correction: SNR7_80codewords_HalfPrecision
+#####cuPHY_LDPC_Error_Correction: SNR7_80codewords_HalfPrecision
 cuPHY/build/examples/error_correction/cuphy_ex_ldpc -i ./testVectors/ldpc_BG1_K8448_SNR7_80.h5 -p 4 -n 10 -x 1 -f
 
 #####cuPHY_ldpc_decode_perf: cuPHY_ldpc_decode_perf_BG1_z384
@@ -101,7 +101,7 @@ cuPHY/build/examples/pdsch_tx/cuphy_ex_pdsch_tx ./testVectors/TV_cuphy_pdsch-def
 #####cuPHY_PDSCH_Modulation(symbol_mapping) : cuPHY_PDSCH_Modulation(symbol_mapping) 
 cuPHY/build/examples/modulation_mapper/modulation_mapper ./testVectors/TV_cuphy_pdsch-default_snrdb40.00_iter1_MIMO8x8_PRB272_DataSyms12_qam256.h5 100
 
-#####cuPHY_PUSCH_Multi-TB_support support : cuPHY_PUSCH_Multi-TB_support
+#####cuPHY_PUSCH_Multi-TB_support_support : cuPHY_PUSCH_Multi-TB_support
 sudo cuPHY/build/examples/pusch_rx_multi_pipe/cuphy_ex_pusch_rx_multi_pipe -i ./testVectors/TV_cuphy_perf-pusch-TC231_snrdb40.00_iter1_MIMO1x4_PRB104_DataSyms10_qam256.h5
 sudo cuPHY/build/examples/pusch_rx_multi_pipe/cuphy_ex_pusch_rx_multi_pipe -i ./testVectors/TV_cuphy_perf-pusch-TC232_snrdb40.00_iter1_MIMO1x4_PRB104_DataSyms10_qam256.h5
 sudo cuPHY/build/examples/pusch_rx_multi_pipe/cuphy_ex_pusch_rx_multi_pipe -i ./testVectors/TV_cuphy_perf-pusch-TC233_snrdb40.00_iter1_MIMO1x4_PRB104_DataSyms10_qam64.h5
