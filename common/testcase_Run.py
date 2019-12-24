@@ -87,7 +87,6 @@ def copyLog(srcfile, dstfile):
     with open(srcfile, 'r') as srcfh:
         with open(dstfile, 'a+') as dstfh:
             dstfh.write(srcfh.read())
-            dstfh.write('\n')
 
 def writelog(srcfile, dstfile, header):
     with open(dstfile, 'a+') as f:
@@ -121,4 +120,3 @@ def seperateTestcase(allcases):
 
 def getcurrDate():
     return datetime.datetime.now().strftime('%Y-%m-%d-%H:%M:%S')  
-
