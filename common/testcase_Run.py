@@ -140,10 +140,8 @@ def createFolder(folder):
 
     if not isExists:
         os.makedirs(path)
-        print('create folder logs successfully!')
         return True
     else:
-        print('folder logs exists')
         return False
 
 def createFile(filename):
