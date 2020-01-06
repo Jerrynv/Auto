@@ -2,6 +2,7 @@
 
 import math
 import re
+import logging
 import logMatch
 
 def checkResult(logfile):
@@ -17,13 +18,17 @@ def checkResult(logfile):
         elapsedtimelist = logMatch.getElapsedTimeList(suitename, logContent)
         errorBitList = logMatch.getErrorBitList(suitename, logContent)
 
-        print(tputlist)
+        #print(tputlist)
+        logging.debug('tputlist = {}'.format(tputlist))
         avg_tput, stddev_tput = calcStandardDev(tputlist)
-        print(avg_tput, stddev_tput)
+        #print(avg_tput, stddev_tput)
+        logging.info('avg_tput={}, stddev={}'.format(avg_tput, stddev_tput))
 
-        print(elapsedtimelist)
+        #print(elapsedtimelist)
+        logging.debug('elapsedtimelist = {}'.format(elapsedtimelist))
         avg_time, stddev_elapsedTime = calcStandardDev(elapsedtimelist)
-        print(avg_time, stddev_elapsedTime)
+        #print(avg_time, stddev_elapsedTime)
+        logging.info('avg_time={}, stddev={}'.format(avg_time, stddev_elapsedTime))
 
         print(errorBitList)
 
@@ -45,28 +50,41 @@ def checkResultBycase(logfile, suitename):
     errorBitList = logMatch.getErrorBitList(suitename, logContent)
 
     if len(tputlist) == 0 or len(elapsedtimelist) ==0:
-        print('-------------------- LOG Analyze Result --------------------')
-        print('------------------------------------------------------FAILED')
+        logging.info('-------------------- LOG Analyze Result --------------------')
+        logging.info('------------------------------------------------------FAILED')
         return
     #print('tputlist={}'.format(tputlist))
-    avg_tput, stddev_tput = calcStandardDev(tputlist)
-    #print("avg tput={}, stddev_tput={}".format(avg_tput, stddev_tput))
-
+    avg_tput, stdevValue_tput, stdev_tput = calcStandardEv(tputlist)
+    #print("avg tput={}, stdev_tput={}".format(avg_tput, stdev_tput))
+    logging.debug('tputlist={}'.format(tputlist))
+    logging.info("avg tput={}, stdev_tput={}".format(avg_tput, stdev_tput))
 
     #print('elapsedtimelist={}'.format(elapsedtimelist))
-    avg_time, stddev_elapsedTime = calcStandardDev(elapsedtimelist)
-    #print('avg time={}, stddev time={}'.format(avg_time, stddev_elapsedTime))
+    avg_time, stdevValue_elapsedTime, stdev_elapsedTime = calcStandardEv(elapsedtimelist)
+    #print('avg time={}, stddev time={}'.format(avg_time, stdev_elapsedTime))
+    logging.debug('elapsedtimelist={}'.format(elapsedtimelist))
+    logging.info('avg time={}, stdev time={}'.format(avg_time, stdev_elapsedTime))
 
     #print('error bit list={}'.format(errorBitList))
 
     err = filter(lambda x:x>0, errorBitList)
-    result = 'pass' if stddev_tput<5 and stddev_elapsedTime<5 and len(err)<=0 else 'FAILED'
-    print('\n')
+    result = ''
+    reason = ''
+    if stdev_tput<5 and stdev_elapsedTime<5 and len(err)<=0:
+        result, reason = 'pass', ''
+    elif  stdev_tput>5:
+        result, reason = 'FAILED', 'tput avg=%s stdev=%s, %s > 5' % (avg_tput, stdevValue_tput, stdev_tput)
+    elif stdev_elapsedTime>5:
+        result, reason = 'FAILED', 'elapsedtime avg=%s stdev=%s, %s > 5' % (avg_time, stdevValue_elapsedTime, stdev_elapsedTime)
+    else:
+    	result, reason = 'FAILED', 'bit error'
+
+    #print('\n')
     print('-------------------- LOG Analyze Result --------------------')
-    print('tput            = {}, avg tput={:.2f}, stddev tput={:.2f}'.format(tputlist, avg_tput, stddev_tput))
-    print('elapsedtime     = {}, avg time={:.2f}, stddev time={:.2f}'.format(elapsedtimelist, avg_time, stddev_elapsedTime)) 
-    print('bit error count = {}'.format(errorBitList))
-    print('------------------------------------------------------{}'.format(result))
+    print('tput={}, avg tput={:.2f}, stdev tput={:.2f}'.format(tputlist, avg_tput, stdev_tput))
+    print('elapsedtime={}, avg time={:.2f}, stdev time={:.2f}'.format(elapsedtimelist, avg_time, stdev_elapsedTime)) 
+    print('bit error count={}'.format(errorBitList))
+    print('--------------------------------------------------------{} {}\n'.format(result, reason))
     #print('------------------------------------------------------------')
     #print('\n')
 
@@ -83,7 +101,7 @@ def getsuiteNameAndLog(logfile):
 
 ###
 
-def calcStandardDev(datalist): #mean squared error
+def calcStandardEv(datalist): #mean squared error
     total = 0.0
     count = len(datalist)
     for i, data in enumerate(datalist):
@@ -95,15 +113,17 @@ def calcStandardDev(datalist): #mean squared error
     for i, data in enumerate(datalist):
         variance += math.pow((data-avg), 2)
 
-    standardDevValue = math.sqrt(variance/count)
+    standardEVValue = math.sqrt(variance/(count))
 
-    stddev = (standardDevValue/avg) * 100
+    stdev = (standardEVValue/avg) * 100
 
-    return avg, float('%0.2f' % stddev)
+    return avg, standardEVValue, float('%0.2f' % stdev)
 
 if __name__ == '__main__':
-    data = [1.1, 1.2, 1.3, 1.4, 1.5]
-    #print(calcStandardDev(data))
+    data1 = [95, 85, 75, 65, 55, 45]
+    data2 = [73, 72, 71, 69, 68, 67]
+    print('data1 stdev={}'.format(calcStandardEv(data1)))
+    print(calcStandardEv(data2))
     #datafile = '/home/dgx/Jerry/cuPHY_Auto/logs/SNR7_80codewords_HalfPrecision-2019-12-26-23:13:29.txt'
     #datafile = '/home/dgx/Jerry/cuPHY_Auto/logs/MIMO1x8-2019-12-26-22:27:59.txt'
     cmd = '-p 4~42'
@@ -113,5 +133,5 @@ if __name__ == '__main__':
     print(type(pMin))
     for i in range(pMin, pMax+1, 1):
         newCmd = re.sub(match, str(i), cmd)
-        print(newCmd)
+        #print(newCmd)
     #checkResult(datafile)

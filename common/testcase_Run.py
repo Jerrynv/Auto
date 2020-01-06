@@ -8,7 +8,8 @@ from common import testcase_Parse
 from common import logAnalyze
 
 def run_testcase(caseName, curan_path, arguementList):
-    createFolder('logs')
+#    createFolder('logs')
+    print('\nstart run the case ...\n')
     if caseName == 'all_case' or caseName == 'all':
         run_allTestcase(caseName, curan_path, arguementList)
     else:
@@ -36,47 +37,8 @@ def runCases(caseCmds, curan_path, arguementList):
         elif suitename.split(':')[0].strip() == 'cuPHY_PUSCH_LDPC_support_multiple_code_rates_including_HARQ_rate':
             runParticularCase_cuPHY_PUSCH_LDPC_support_multiple_code_rates_including_HARQ_rate(cmd, suitename, curan_path, tempfile, logname, arguementList.duration, arguementList.iter)
         else:
-            cmd = convertCmdToAbspath(cmd, curan_path)
+            cmd = convertCmdToAbspath(cmd, curan_path, arguementList.pkg)
             runCommandsAndSaveLog(cmd, arguementList.iter, arguementList.duration, tempfile, logname, suitename)
-            #runCommandsAndSaveLog(cmd, arguementList.iter, arguementList.duration, tempfile, logname, suitename)
-
-    """
-    if arguementList.duration == 0:
-        for cmd in caseCmds:
-            if '#' in cmd or cmd.strip() == '':
-                continue
-            else:
-                if suitename.split(':')[0].strip() == 'cuPHY_PUSCH_LDPC_support_multiple_code_rates_including_HARQ_rate':
-                    runParticularCase_cuPHY_PUSCH_LDPC_support_multiple_code_rates_including_HARQ_rate(cmd, suitename, curan_path, tempfile, logname, arguementList.iter)
-                else:
-                    cmd = convertCmdToAbspath(cmd, curan_path)
-                    runCommandsAndSaveLog(cmd, arguementList.iter, tempfile, logname, suitename)
-    else:
-        for cmd in caseCmds:
-            if '#' in cmd or cmd.strip() == '':
-                continue
-            print("AAAAAAA={}".format(cmd))
-            starttime = time.time()
-            while ((time.time()-starttime)/60) < arguementList.duration:
-                if suitename.split(':')[0].strip() == 'cuPHY_PUSCH_LDPC_support_multiple_code_rates_including_HARQ_rate':
-                    runParticularCase_cuPHY_PUSCH_LDPC_support_multiple_code_rates_including_HARQ_rate(cmd, suitename, curan_path, tempfile, logname)
-                else:
-                    cmd = convertCmdToAbspath(cmd, curan_path)
-                    runCommandsAndSaveLog(cmd, arguementList.iter, tempfile, logname, suitename)
-    """
-    pass
-    """
-        starttime = time.time()
-        while ((time.time()-starttime)/60) < arguementList.duration:
-            for cmd in caseCmds:
-                if '#' in cmd or cmd.strip() == '':
-                    continue
-                else:
-                    cmd = convertCmdToAbspath(cmd, curan_path)
-                    runCommand(cmd, tempfile)
-                    writelog(tempfile, 'logs/%s.txt' % logname, cmd, suitename)
-                    os.remove(tempfile)
-    """
 
 def runCommandsAndSaveLog(cmd, iter_times, duration, temp_file, logname, suitename):
     if (duration == 0):
@@ -109,10 +71,14 @@ def runCommand(cmd, logfile):
     else:
         os.system('%s >> %s' % (cmd, logfile))
 
-def convertCmdToAbspath(cmd, curan_path):
+def convertCmdToAbspath(cmd, curan_path, pkg='binary'):
     cmd = cmd.strip().replace('\n', '')
-    cmd = cmd.replace('cuPHY/build/', '/'.join([curan_path, 'cuPHY/build/']))
-    cmd = cmd.replace('./testVectors', '/'.join([curan_path,'testVectors']))
+    if pkg == 'binary':
+        cmd = cmd.replace('build/', '/'.join([curan_path, 'cuPHY/build/']))
+        cmd = cmd.replace('./testVectors', '/'.join([curan_path,'testVectors']))
+    elif pkg == 'src':
+        cmd = cmd.replace('build/', '/'.join([curan_path, 'build/']))
+        cmd = cmd.replace('./testVectors', '/'.join([curan_path,'testVectors']))
 
     return cmd
 
