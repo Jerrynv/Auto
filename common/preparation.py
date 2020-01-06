@@ -3,6 +3,7 @@
 import requests
 import re
 import os
+import sys
 import zipfile
 import tarfile
 
@@ -91,13 +92,14 @@ def compilecuPHY_binary(cuda_ran_sdk):
     libPath = os.path.join(currpath, '%s/cuPHY/lib:$LD_LIBRARY_PATH' % cuda_ran_sdk)
     newPath = os.path.join(currpath, '%s/cuPHY/build' % cuda_ran_sdk)
 
+    #os.system('export PATH=/usr/local/cuda/bin:$PATH')
+    #os.system('export LD_LIBRARY_PATH=%s:$LD_LIBRARY_PATH' % libPath)
+    #sys.path.append('/usr/local/cuda/bin')
+
     os.chdir(newPath)
     os.system('cmake ..')
     os.system('make -j 44')
     os.chdir(currpath)
-
-    os.system('export PATH=/usr/local/cuda/bin:$PATH')
-    os.system('export LD_LIBRARY_PATH=%s:$LD_LIBRARY_PATH' % libPath)
 
     print('\ncompile cuda ran sdk done\n')
 
@@ -117,21 +119,26 @@ def compilecuPHY_Src(cuda_ran_sdk):
 
     print('\ncompile cuda ran sdk done\n')
 
-def doPrepare(folder, args):
-    currpath = os.getcwd()
-    if (folder != ''):
-        return os.path.join(currpath, folder)
+def doPrepare(existsdkfolder, args, pkgFolder):
+    oldPath = os.getcwd()
+    newPath = os.path.join(oldPath, pkgFolder)
+
+    if (existsdkfolder != ''):
+        return os.path.join(newPath, existsdkfolder)
     else:
+        os.chdir(newPath)
         url = url_binary if args.pkg == 'binary' else url_src
         pkgType, targetZipfile = downloadFile(url)
-        tempTGZFile = extractZipFile(targetZipfile, currpath)
-        extractTarfile(tempTGZFile, currpath)
-        pkgFoldername = tempTGZFile[0:-4]
+        tempTGZFile = extractZipFile(targetZipfile, newPath)
+        extractTarfile(tempTGZFile, newPath)
+        newsdkFolder = tempTGZFile[0:-4]
         if args.pkg == 'binary':
-            compilecuPHY_binary(pkgFoldername)
+            compilecuPHY_binary(newsdkFolder)
         else:
-            compilecuPHY_Src(pkgFoldername)
-        return os.path.join(currpath, pkgFoldername)
+            compilecuPHY_Src(newsdkFolder)
+
+        os.chdir(oldPath)
+        return os.path.join(newPath, newsdkFolder)
 
 def doPrepare_curanbinary(folder):
     currpath = os.getcwd()
