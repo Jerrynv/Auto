@@ -44,7 +44,8 @@ speacify the case to run how much times. e.g --iter 5, default is 1, if the --du
 speacify the case to run how much time,unit is minute. e.g --duration 1, default is 0  
   
 --pkg  
-speacify which package would be downloaded/decopress/compiled, the valus should be src or binary. e.g --pkg binary, default is binary    
+speacify which package would be downloaded/decopress/compiled, the valus should be src or binary. e.g --pkg binary, default is binary     
+  
 run the single case  
    python run.py --case casename --pkg src/binaly --speacify the binary or src package, default is binary  
 run all case  
