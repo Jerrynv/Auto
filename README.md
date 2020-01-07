@@ -1,5 +1,5 @@
 ## Get the automatic script
-   git clone https://github.com/Jerrynv/Auto.git
+   '<git clone https://github.com/Jerrynv/Auto.git'>
 
 ## Prerequisites
    Add the cuda the system path:
@@ -8,7 +8,7 @@
 -------------------------------------------------------------------------------------------------
 ## if using the local cuda ran sdk, the --curan speacify the local cuda ran sdk workplace
 
---curan speacify the local cuda ran sdk work place, should be comiled, and can run the case locally. e.g. --curan /dgx/cuda-ran-sdk.0.5
+'<--curan speacify the local cuda ran sdk work place, should be comiled, and can run the case locally. e.g. --curan /dgx/cuda-ran-sdk.0.5>'
 --case  speacify the case name to run, all the cases were difined in './testcase/caselist.txt' 
     e.g. #####cuPHY_LDPC_Error_Correction: SNR10_104codewords_SinglePrecision, the suite name is cuPHY_LDPC_Error_Correction, case name is SNR10_104codewords_SinglePrecision
          --case SNR10_104codewords_SinglePrecision
