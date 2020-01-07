@@ -47,9 +47,9 @@ def downloadFile(url):
     if os.path.exists(targetFileNameAbsPath):
         logger.info('file %s exist, ignore download ...\n' % targetFileName)
     else:
-        logger.info('\nstart download cuda ran sdk pkgType={} ...\n'.format(pkgType))
+        logger.info('start download cuda ran sdk pkgType={} ...\n'.format(pkgType))
         os.system('wget %s' % downlnk)
-        logger.info('\ndownload cuda ran sdk done!\n')
+        logger.info('download cuda ran sdk done!\n')
 
     return pkgType, targetFileName
 
@@ -73,7 +73,7 @@ def pickcuRanPkg(filelist):
 
 def extractZipFile(file_zip, path):
     with zipfile.ZipFile(file_zip) as zf:
-        logger.info('\nstart decompress cuda ran sdk ...\n')
+        logger.info('start decompress cuda ran sdk ...\n')
         zf.extractall(path)
         return zf.namelist()[0]
 
@@ -81,10 +81,10 @@ def extractTarfile(file_tar, path):
     with tarfile.open(file_tar, 'r:gz') as tf:
         for tarinfo in tf:
             tf.extract(tarinfo.name, path)
-    logger.info('\ndecompress cuda ran sdk done\n')
+    logger.info('decompress cuda ran sdk done\n')
 
 def compilecuPHY_binary(cuda_ran_sdk):
-    logger.info('\nstart compile cuda ran sdk ...\n')
+    logger.info('start compile cuda ran sdk ...\n')
     currpath = os.getcwd()
 
     os.system("rm -rf %s/cuPHY/build" % cuda_ran_sdk)
@@ -101,7 +101,7 @@ def compilecuPHY_binary(cuda_ran_sdk):
     os.system('make -j 44')
     os.chdir(currpath)
 
-    print('\ncompile cuda ran sdk done\n')
+    logger.info('compile cuda ran sdk done\n')
 
 def compilecuPHY_Src(cuda_ran_sdk):
     logger.info('\nstart compile cuphy src ...\n')
