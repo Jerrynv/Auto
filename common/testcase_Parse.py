@@ -1,5 +1,6 @@
 # -*- coding: utf-8 -*-
 import os
+from common.logsave import logger
 
 testcaseFileName = 'testcase/caselist.txt'
 currenWorkPath = os.getcwd()

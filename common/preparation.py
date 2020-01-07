@@ -6,6 +6,7 @@ import os
 import sys
 import zipfile
 import tarfile
+from common.logsave import logger
 
 url_binary="http://scdvstransfer.nvidia.com/dvsshare/vol1/gputelecom_rel_cuda10.1_r418_Release_Ubuntu16_04_AMD64_cuda.ran.release/"
 url_src="http://scdvstransfer.nvidia.com/dvsshare/vol1/gputelecom_rel_cuda10.1_r418_Release_Ubuntu16_04_AMD64_cuphy.source.release/"
@@ -44,12 +45,11 @@ def downloadFile(url):
     targetFileNameAbsPath = os.path.join(os.getcwd(), targetFileName)
 
     if os.path.exists(targetFileNameAbsPath):
-        print('file %s exist, ignore download ...\n' % targetFileName)
+        logger.info('file %s exist, ignore download ...\n' % targetFileName)
     else:
-        #print(downlnk)
-        print('\nstart download cuda ran sdk pkgType={} ...\n'.format(pkgType))
+        logger.info('\nstart download cuda ran sdk pkgType={} ...\n'.format(pkgType))
         os.system('wget %s' % downlnk)
-        print('\ndownload cuda ran sdk done!\n')
+        logger.info('\ndownload cuda ran sdk done!\n')
 
     return pkgType, targetFileName
 
@@ -73,7 +73,7 @@ def pickcuRanPkg(filelist):
 
 def extractZipFile(file_zip, path):
     with zipfile.ZipFile(file_zip) as zf:
-        print('\nstart decompress cuda ran sdk ...\n')
+        logger.info('\nstart decompress cuda ran sdk ...\n')
         zf.extractall(path)
         return zf.namelist()[0]
 
@@ -81,10 +81,10 @@ def extractTarfile(file_tar, path):
     with tarfile.open(file_tar, 'r:gz') as tf:
         for tarinfo in tf:
             tf.extract(tarinfo.name, path)
-    print('\ndecompress cuda ran sdk done\n')
+    logger.info('\ndecompress cuda ran sdk done\n')
 
 def compilecuPHY_binary(cuda_ran_sdk):
-    print('\nstart compile cuda ran sdk ...\n')
+    logger.info('\nstart compile cuda ran sdk ...\n')
     currpath = os.getcwd()
 
     os.system("rm -rf %s/cuPHY/build" % cuda_ran_sdk)
@@ -104,7 +104,7 @@ def compilecuPHY_binary(cuda_ran_sdk):
     print('\ncompile cuda ran sdk done\n')
 
 def compilecuPHY_Src(cuda_ran_sdk):
-    print('\nstart compile cuphy src ...\n')
+    logger.info('\nstart compile cuphy src ...\n')
     currpath = os.getcwd()
 
     os.system("rm -rf %s/build" % cuda_ran_sdk)
@@ -117,7 +117,7 @@ def compilecuPHY_Src(cuda_ran_sdk):
     os.system('make -j 44')
     os.chdir(currpath)
 
-    print('\ncompile cuda ran sdk done\n')
+    logger.info('\ncompile cuda ran sdk done\n')
 
 def doPrepare(existsdkfolder, args, pkgFolder):
     oldPath = os.getcwd()

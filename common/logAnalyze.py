@@ -1,9 +1,9 @@
 # -*- coding:utf-8 -*-
-
 import math
 import re
 import logging
 import logMatch
+from common.logsave import logger
 
 def checkResult(logfile):
     suitename, logContent = getsuiteNameAndLog(logfile)
@@ -44,49 +44,42 @@ def checkResultBycase(logfile, suitename):
     logContent = ''
     with open(logfile, 'r') as f:
         logContent = f.read()
-        #print('log={}'.format(logContent))
     tputlist = logMatch.getTputList(suitename, logContent)
     elapsedtimelist = logMatch.getElapsedTimeList(suitename, logContent)
     errorBitList = logMatch.getErrorBitList(suitename, logContent)
 
     if len(tputlist) == 0 or len(elapsedtimelist) ==0:
-        logging.info('-------------------- LOG Analyze Result --------------------')
-        logging.info('------------------------------------------------------FAILED')
+        logger.info('-------------------- LOG Analyze Result --------------------')
+        logger.info('------------------------------------------------------FAILED')
         return
-    #print('tputlist={}'.format(tputlist))
     avg_tput, stdevValue_tput, stdev_tput = calcStandardEv(tputlist)
-    #print("avg tput={}, stdev_tput={}".format(avg_tput, stdev_tput))
-    logging.debug('tputlist={}'.format(tputlist))
-    logging.info("avg tput={}, stdev_tput={}".format(avg_tput, stdev_tput))
+    logger.debug('tputlist={}'.format(tputlist))
+    logger.debug("avg tput={}, stdev_tput={}".format(avg_tput, stdev_tput))
 
-    #print('elapsedtimelist={}'.format(elapsedtimelist))
     avg_time, stdevValue_elapsedTime, stdev_elapsedTime = calcStandardEv(elapsedtimelist)
-    #print('avg time={}, stddev time={}'.format(avg_time, stdev_elapsedTime))
-    logging.debug('elapsedtimelist={}'.format(elapsedtimelist))
-    logging.info('avg time={}, stdev time={}'.format(avg_time, stdev_elapsedTime))
-
-    #print('error bit list={}'.format(errorBitList))
+    logger.debug('elapsedtimelist={}'.format(elapsedtimelist))
+    logger.debug('avg time={}, stdev time={}'.format(avg_time, stdev_elapsedTime))
 
     err = filter(lambda x:x>0, errorBitList)
     result = ''
     reason = ''
     if stdev_tput<5 and stdev_elapsedTime<5 and len(err)<=0:
-        result, reason = 'pass', ''
+        result, reason = '\033[32mPASS', '\033[0m'
     elif  stdev_tput>5:
-        result, reason = 'FAILED', 'tput avg=%s stdev=%s, %s > 5' % (avg_tput, stdevValue_tput, stdev_tput)
+        result, reason = '\033[31mFAILED', '\033[0mtput avg=%s stdev=%s, %s > 5' % (avg_tput, stdevValue_tput, stdev_tput)
     elif stdev_elapsedTime>5:
-        result, reason = 'FAILED', 'elapsedtime avg=%s stdev=%s, %s > 5' % (avg_time, stdevValue_elapsedTime, stdev_elapsedTime)
+        result, reason = '\033[31mFAILED', '\033[0melapsedtime avg=%s stdev=%s, %s > 5' % (avg_time, stdevValue_elapsedTime, stdev_elapsedTime)
     else:
-    	result, reason = 'FAILED', 'bit error'
+    	result, reason = '\033[31mFAILED', '\033[0mbit error'
 
     #print('\n')
-    print('-------------------- LOG Analyze Result --------------------')
-    print('tput={}, avg tput={:.2f}, stdev tput={:.2f}'.format(tputlist, avg_tput, stdev_tput))
-    print('elapsedtime={}, avg time={:.2f}, stdev time={:.2f}'.format(elapsedtimelist, avg_time, stdev_elapsedTime)) 
-    print('bit error count={}'.format(errorBitList))
-    print('--------------------------------------------------------{} {}\n'.format(result, reason))
+    logger.info('-------------------- LOG Analyze Result --------------------')
+    logger.info('tput={}, avg tput={:.2f}, stdev tput={:.2f}'.format(tputlist, avg_tput, stdev_tput))
+    logger.info('elapsedtime={}, avg time={:.2f}, stdev time={:.2f}'.format(elapsedtimelist, avg_time, stdev_elapsedTime)) 
+    logger.info('bit error count={}'.format(errorBitList))
+    logger.info('--------------------------------------------------------{} {}\n'.format(result, reason))
+    #logger.debug('\033[0m')
     #print('------------------------------------------------------------')
-    #print('\n')
 
 def getsuiteNameAndLog(logfile):
     suitename = ''

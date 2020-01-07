@@ -6,7 +6,8 @@ from common import testcase_Parse
 from common import testcase_Run
 from common import logsave
 from common import preparation
-from common.logsave import Logger
+from common.logsave import logger
+
 
 def checkcuRanSdkFolder(args, pkgFolder):
     pkgpath = os.path.join(os.getcwd(), pkgFolder)
@@ -21,9 +22,9 @@ def checkcuRanSdkFolder(args, pkgFolder):
 def getcudaransdk(args, pkgFolder):
     cuRanSdkexistFolder = checkcuRanSdkFolder(args, pkgFolder)
     if cuRanSdkexistFolder != '':
-        print("cuRanSdkexistFolder={}".format(cuRanSdkexistFolder))
+        logger.debug("cuRanSdkexistFolder : {}".format(cuRanSdkexistFolder))
     else:
-        print("the cuRan sdk folder don't exist, will create it")
+        logger.debug("the cuRan sdk folder don't exist, will create it")
     cuda_ran_sdk = args.curan[0] if args.curan != None else preparation.doPrepare(cuRanSdkexistFolder, args, pkgFolder)
 
     return cuda_ran_sdk
@@ -34,18 +35,13 @@ if __name__ == '__main__':
     testcase_Run.createFolder('logs')
     testcase_Run.createFolder(pkgFolder)
 
-    #log = logsave.Logger('logs/all.log',level='debug')
-    #criticallog = logsave.Logger('logs/error.log', level='error')
 
-    #print("args:{}".format(args))
-    #log.debug('args:{}'.format(args))
-    #cuRanSdkFolder = checkcuRanSdk(args)
-    print((args))
+    logger.info("args:{}".format(args))
     cuda_ran_sdk = getcudaransdk(args, pkgFolder)
-    print('the running cuda_ran_sdk folder : {}'.format(cuda_ran_sdk))
+
+    logger.info('the running cuda_ran_sdk folder : {}'.format(cuda_ran_sdk))
     
     if args.case:
-        #testcase_Run.run_testcase(args.case[0], args.curan[0], args)
         testcase_Run.run_testcase(args.case[0], cuda_ran_sdk, args)
     elif args.all_case:
         print("run all cases")

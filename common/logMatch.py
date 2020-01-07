@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
-
 import re
+from common.logsave import logger
 
 ### API
 def getTputList(suitename, log):

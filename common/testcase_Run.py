@@ -6,10 +6,10 @@ import time
 import re
 from common import testcase_Parse
 from common import logAnalyze
+from common.logsave import logger
 
 def run_testcase(caseName, curan_path, arguementList):
-#    createFolder('logs')
-    print('\nstart run the case ...\n')
+    logger.info('\nstart run the case ...\n')
     if caseName == 'all_case' or caseName == 'all':
         run_allTestcase(caseName, curan_path, arguementList)
     else:
@@ -21,7 +21,7 @@ def run_singleTestcase(caseName, curan_path, arguementList):
     runCases(caseCmds, curan_path, arguementList)
 
 def runCases(caseCmds, curan_path, arguementList):
-    print('casecmd={}'.format(caseCmds))
+    logger.info('casecmd={}'.format(caseCmds))
     casename = caseCmds[0].strip().replace('\n', '').strip().split(':')[-1].strip()
     suitename = caseCmds[0][5:]
 
@@ -42,12 +42,12 @@ def runCases(caseCmds, curan_path, arguementList):
 
 def runCommandsAndSaveLog(cmd, iter_times, duration, temp_file, logname, suitename):
     if (duration == 0):
-        print('run case {} times:'.format(iter_times))
-        print('{}'.format(cmd))
+        logger.info('run case {} times:'.format(iter_times))
+        logger.info('{}'.format(cmd))
         loopRunCommand_byiter(cmd, iter_times, temp_file)
     else:
-        print('run case in {} minutes:'.format(duration))
-        print('{}'.format(cmd))
+        logger.info('run case in {} minutes:'.format(duration))
+        logger.info('{}'.format(cmd))
         loopRunCommand_bytime(cmd, duration, temp_file)
 
     logAnalyze.checkResultBycase(temp_file, suitename.split(':')[0].strip())
