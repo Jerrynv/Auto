@@ -9,14 +9,14 @@ from common import logAnalyze
 from common.logsave import logger
 
 def run_testcase(caseName, curan_path, arguementList):
-    logger.info('\nstart run the case ...\n')
+    logger.info('start run the case ...\n')
     if caseName == 'all_case' or caseName == 'all':
         run_allTestcase(caseName, curan_path, arguementList)
     else:
         run_singleTestcase(caseName, curan_path, arguementList)
 
 def run_singleTestcase(caseName, curan_path, arguementList):
-    caseCmds = testcase_Parse.gettestcaseCmdList(caseName)
+    caseCmds = testcase_Parse.gettestcaseCmdList(caseName, arguementList)
 
     runCases(caseCmds, curan_path, arguementList)
 
@@ -142,7 +142,7 @@ def writelog(srcfile, dstfile, cmds, suitename):
         f.write('\n\n')
 
 def run_allTestcase(caseName, curan_path, arguementList):
-    caseCmds = testcase_Parse.gettestcaseCmdList(caseName)
+    caseCmds = testcase_Parse.gettestcaseCmdList(caseName, arguementList)
 
     caselist = seperateTestcase(caseCmds)
 

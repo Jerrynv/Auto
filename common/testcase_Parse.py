@@ -7,9 +7,14 @@ currenWorkPath = os.getcwd()
 
 testcaseFile_path = os.path.join(currenWorkPath, testcaseFileName)
 
-def gettestcaseCmdList(testInput):
+def gettestcaseCmdList(testInput, args):
     bFindCase = False
     start_pos = 0
+
+    testcaseFileName = 'testcase/caselist_binary.txt' if args.pkg=='binary' else 'testcase/caselist_src.txt'
+
+    currenWorkPath = os.getcwd()
+    testcaseFile_path = os.path.join(currenWorkPath, testcaseFileName)
     
     with open(testcaseFile_path, 'r') as f:
         if testInput == 'all' or testInput == 'all_case':

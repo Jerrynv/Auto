@@ -45,7 +45,7 @@ def downloadFile(url):
     targetFileNameAbsPath = os.path.join(os.getcwd(), targetFileName)
 
     if os.path.exists(targetFileNameAbsPath):
-        logger.info('file %s exist, ignore download ...\n' % targetFileName)
+        logger.info('file %s exist, download ignore ...\n' % targetFileName)
     else:
         logger.info('start download cuda ran sdk pkgType={} ...\n'.format(pkgType))
         os.system('wget %s' % downlnk)
@@ -104,7 +104,7 @@ def compilecuPHY_binary(cuda_ran_sdk):
     logger.info('compile cuda ran sdk done\n')
 
 def compilecuPHY_Src(cuda_ran_sdk):
-    logger.info('\nstart compile cuphy src ...\n')
+    logger.info('start compile cuphy src ...\n')
     currpath = os.getcwd()
 
     os.system("rm -rf %s/build" % cuda_ran_sdk)
