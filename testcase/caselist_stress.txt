@@ -1,0 +1,52 @@
+"""
+suite: testcase
+"""
+#####cuPHY_PUSCH_rx_pipeline: MIMO1x8
+sudo build/examples/pusch_rx_multi_pipe/cuphy_ex_pusch_rx_multi_pipe -i ./testVectors/TV_cuphy_pusch-TC3_snrdb40.00_iter1_MIMO1x8_PRB272_DataSyms9_qam64.h5
+sudo build/examples/pusch_rx_multi_pipe/cuphy_ex_pusch_rx_multi_pipe -i ./testVectors/TV_cuphy_pusch-TC6_snrdb40.00_iter1_MIMO1x8_PRB272_DataSyms9_qam16.h5
+sudo build/examples/pusch_rx_multi_pipe/cuphy_ex_pusch_rx_multi_pipe -i ./testVectors/TV_cuphy_pusch-TC13_snrdb40.00_iter1_MIMO1x8_PRB272_DataSyms9_qam4.h5
+sudo build/examples/pusch_rx_multi_pipe/cuphy_ex_pusch_rx_multi_pipe -i ./testVectors/TV_cuphy_pusch-TC16_snrdb40.00_iter1_MIMO1x8_PRB272_DataSyms9_qam256.h5
+
+#####cuPHY_PUSCH_rx_pipeline: MIMO4x8
+sudo build/examples/pusch_rx_multi_pipe/cuphy_ex_pusch_rx_multi_pipe -i ./testVectors/TV_cuphy_pusch-TC1_snrdb40.00_iter1_MIMO4x8_PRB272_DataSyms9_qam64.h5
+sudo build/examples/pusch_rx_multi_pipe/cuphy_ex_pusch_rx_multi_pipe -i ./testVectors/TV_cuphy_pusch-TC4_snrdb40.00_iter1_MIMO4x8_PRB272_DataSyms9_qam16.h5
+sudo build/examples/pusch_rx_multi_pipe/cuphy_ex_pusch_rx_multi_pipe -i ./testVectors/TV_cuphy_pusch-TC11_snrdb40.00_iter1_MIMO4x8_PRB272_DataSyms9_qam4.h5
+sudo build/examples/pusch_rx_multi_pipe/cuphy_ex_pusch_rx_multi_pipe -i ./testVectors/TV_cuphy_pusch-TC14_snrdb40.00_iter1_MIMO4x8_PRB272_DataSyms9_qam256.h5
+
+#####cuPHY_PUSCH_rx_pipeline: MIMO2x8
+sudo build/examples/pusch_rx_multi_pipe/cuphy_ex_pusch_rx_multi_pipe -i ./testVectors/TV_cuphy_pusch-TC2_snrdb40.00_iter1_MIMO2x8_PRB272_DataSyms9_qam64.h5
+sudo build/examples/pusch_rx_multi_pipe/cuphy_ex_pusch_rx_multi_pipe -i ./testVectors/TV_cuphy_pusch-TC5_snrdb40.00_iter1_MIMO2x8_PRB272_DataSyms9_qam16.h5
+sudo build/examples/pusch_rx_multi_pipe/cuphy_ex_pusch_rx_multi_pipe -i ./testVectors/TV_cuphy_pusch-TC7_snrdb40.00_iter1_MIMO2x8_PRB48_DataSyms9_qam64.h5
+sudo build/examples/pusch_rx_multi_pipe/cuphy_ex_pusch_rx_multi_pipe -i ./testVectors/TV_cuphy_pusch-TC8_snrdb40.00_iter1_MIMO2x8_PRB64_DataSyms9_qam16.h5
+sudo build/examples/pusch_rx_multi_pipe/cuphy_ex_pusch_rx_multi_pipe -i ./testVectors/TV_cuphy_pusch-TC12_snrdb40.00_iter1_MIMO2x8_PRB272_DataSyms9_qam4.h5
+sudo build/examples/pusch_rx_multi_pipe/cuphy_ex_pusch_rx_multi_pipe -i ./testVectors/TV_cuphy_pusch-TC15_snrdb40.00_iter1_MIMO2x8_PRB272_DataSyms9_qam256.h5
+
+#####cuPHY_PUSCH_Multi-TB_support_support : cuPHY_PUSCH_Multi-TB_support
+sudo build/examples/pusch_rx_multi_pipe/cuphy_ex_pusch_rx_multi_pipe -i ./testVectors/TV_cuphy_perf-pusch-TC231_snrdb40.00_iter1_MIMO1x4_PRB104_DataSyms10_qam256.h5
+sudo build/examples/pusch_rx_multi_pipe/cuphy_ex_pusch_rx_multi_pipe -i ./testVectors/TV_cuphy_perf-pusch-TC232_snrdb40.00_iter1_MIMO1x4_PRB104_DataSyms10_qam256.h5
+sudo build/examples/pusch_rx_multi_pipe/cuphy_ex_pusch_rx_multi_pipe -i ./testVectors/TV_cuphy_perf-pusch-TC233_snrdb40.00_iter1_MIMO1x4_PRB104_DataSyms10_qam64.h5
+sudo build/examples/pusch_rx_multi_pipe/cuphy_ex_pusch_rx_multi_pipe -i ./testVectors/TV_cuphy_perf-pusch-TC234_snrdb40.00_iter1_MIMO1x4_PRB104_DataSyms10_qam64.h5
+sudo build/examples/pusch_rx_multi_pipe/cuphy_ex_pusch_rx_multi_pipe -i ./testVectors/TV_cuphy_perf-pusch-TC235_snrdb40.00_iter1_MIMO1x4_PRB104_DataSyms10_qam16.h5
+
+sudo build/examples/pusch_rx_multi_pipe/cuphy_ex_pusch_rx_multi_pipe -i ./testVectors/TV_cuphy_perf-pusch-TC281_snrdb40.00_iter1_MIMO8x16_PRB272_DataSyms10_qam256.h5
+sudo build/examples/pusch_rx_multi_pipe/cuphy_ex_pusch_rx_multi_pipe -i ./testVectors/TV_cuphy_perf-pusch-TC282_snrdb40.00_iter1_MIMO8x16_PRB272_DataSyms10_qam256.h5
+sudo build/examples/pusch_rx_multi_pipe/cuphy_ex_pusch_rx_multi_pipe -i ./testVectors/TV_cuphy_perf-pusch-TC283_snrdb40.00_iter1_MIMO8x16_PRB272_DataSyms10_qam64.h5
+sudo build/examples/pusch_rx_multi_pipe/cuphy_ex_pusch_rx_multi_pipe -i ./testVectors/TV_cuphy_perf-pusch-TC284_snrdb40.00_iter1_MIMO8x16_PRB272_DataSyms10_qam64.h5
+sudo build/examples/pusch_rx_multi_pipe/cuphy_ex_pusch_rx_multi_pipe -i ./testVectors/TV_cuphy_perf-pusch-TC285_snrdb40.00_iter1_MIMO8x16_PRB272_DataSyms10_qam16.h5
+
+#####cuPHY_PDSCH-pipeline_integration : cuPHY_PDSCH-pipeline_integration
+#build/examples/pdsch_tx/cuphy_ex_pdsch_tx ./testVectors/TV_cuphy_pdsch-default_snrdb40.00_iter1_MIMO8x8_PRB272_DataSyms12_qam256.h5  100
+
+#####cuPHY_PDSCH_Modulation(symbol_mapping) : cuPHY_PDSCH_Modulation(symbol_mapping) 
+#build/examples/modulation_mapper/modulation_mapper ./testVectors/TV_cuphy_pdsch-default_snrdb40.00_iter1_MIMO8x8_PRB272_DataSyms12_qam256.h5 100
+
+#####cuPHY_PUCCH-Format_1_complete : cuPHY_PUCCH-Format_1_complete
+#build/examples/pucch_receiver/pucch_receiver ./testVectors/last_TC1_pucch.h5 100
+#build/examples/pucch_receiver/pucch_receiver ./testVectors/last_TC2_pucch.h5 100
+#build/examples/pucch_receiver/pucch_receiver ./testVectors/last_TC3_pucch.h5 100
+#build/examples/pucch_receiver/pucch_receiver ./testVectors/last_TC4_pucch.h5 100
+#build/examples/pucch_receiver/pucch_receiver ./testVectors/last_TC5_pucch.h5 100
+#build/examples/pucch_receiver/pucch_receiver ./testVectors/last_TC6_pucch.h5 100
+
+##### End
+
