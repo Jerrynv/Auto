@@ -2,7 +2,7 @@
 import math
 import re
 import logging
-import logMatch
+from common import logMatch
 from common.logsave import logger
 
 def checkResult(logfile):
@@ -17,18 +17,8 @@ def checkResult(logfile):
         tputlist = logMatch.getTputList(suitename, logContent)
         elapsedtimelist = logMatch.getElapsedTimeList(suitename, logContent)
         errorBitList = logMatch.getErrorBitList(suitename, logContent)
-
-        #print(tputlist)
-        logging.debug('tputlist = {}'.format(tputlist))
-        avg_tput, stddev_tput = calcStandardDev(tputlist)
-        #print(avg_tput, stddev_tput)
-        logging.info('avg_tput={}, stddev={}'.format(avg_tput, stddev_tput))
-
-        #print(elapsedtimelist)
-        logging.debug('elapsedtimelist = {}'.format(elapsedtimelist))
-        avg_time, stddev_elapsedTime = calcStandardDev(elapsedtimelist)
-        #print(avg_time, stddev_elapsedTime)
-        logging.info('avg_time={}, stddev={}'.format(avg_time, stddev_elapsedTime))
+        avg_tput, stdevValue_tput, stdev_tput = calcStandardEv(tputlist)
+        avg_time, stdevValue_elapsedTime, stdev_elapsedTime = calcStandardEv(elapsedtimelist)
 
         print(errorBitList)
 

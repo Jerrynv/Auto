@@ -21,7 +21,7 @@ def run_singleTestcase(caseName, curan_path, arguementList):
     runCases(caseCmds, curan_path, arguementList)
 
 def runCases(caseCmds, curan_path, arguementList):
-    logger.info('casecmd={}'.format(caseCmds))
+    logger.info('casecmd={}\n'.format(caseCmds))
     casename = caseCmds[0].strip().replace('\n', '').strip().split(':')[-1].strip()
     suitename = caseCmds[0][5:]
 
@@ -56,7 +56,9 @@ def runCommandsAndSaveLog(cmd, iter_times, duration, temp_file, logname, suitena
     os.remove(temp_file)
 
 def loopRunCommand_byiter(cmd, iter_times, temp_file):
-    for i in range(iter_times):
+    i = 0
+    while i < iter_times:
+        i += 1
         runCommand(cmd, temp_file)
 
 def loopRunCommand_bytime(cmd, duration, temp_file):
@@ -73,7 +75,7 @@ def runCommand(cmd, logfile):
 
 def convertCmdToAbspath(cmd, curan_path, pkg='binary'):
     cmd = cmd.strip().replace('\n', '')
-    if pkg == 'binary':
+    if pkg == 'binary' or pkg == 'stress':
         cmd = cmd.replace('build/', '/'.join([curan_path, 'cuPHY/build/']))
         cmd = cmd.replace('./testVectors', '/'.join([curan_path,'testVectors']))
     elif pkg == 'src':

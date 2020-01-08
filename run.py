@@ -13,7 +13,7 @@ def checkcuRanSdkFolder(args, pkgFolder):
     pkgpath = os.path.join(os.getcwd(), pkgFolder)
     for root, dirs, files in os.walk(pkgpath, topdown=True):
         for i in dirs:
-            if args.pkg == 'binary' and 'cuda-ran-sdk' in i and root == pkgpath:
+            if (args.pkg == 'binary' or args.pkg == 'stress') and 'cuda-ran-sdk' in i and root == pkgpath:
                 return i
             if args.pkg == 'src' and 'cuPHY' in i and root == pkgpath:
                 return i

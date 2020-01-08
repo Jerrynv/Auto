@@ -112,4 +112,3 @@ sudo build/examples/pusch_rx_multi_pipe/cuphy_ex_pusch_rx_multi_pipe -i ./testVe
 sudo build/examples/pusch_rx_multi_pipe/cuphy_ex_pusch_rx_multi_pipe -i ./testVectors/TV_cuphy_perf-pusch-TC285_snrdb40.00_iter1_MIMO8x16_PRB272_DataSyms10_qam16.h5
 
 ##### End
-

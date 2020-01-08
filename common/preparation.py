@@ -119,7 +119,7 @@ def compilecuPHY_Src(cuda_ran_sdk):
 
     logger.info('\ncompile cuda ran sdk done\n')
 
-def doPrepare(existsdkfolder, args, pkgFolder):
+def  doPrepare(existsdkfolder, args, pkgFolder):
     oldPath = os.getcwd()
     newPath = os.path.join(oldPath, pkgFolder)
 
@@ -127,12 +127,12 @@ def doPrepare(existsdkfolder, args, pkgFolder):
         return os.path.join(newPath, existsdkfolder)
     else:
         os.chdir(newPath)
-        url = url_binary if args.pkg == 'binary' else url_src
+        url = url_binary if args.pkg == 'binary' or args.pkg == 'stress' else url_src
         pkgType, targetZipfile = downloadFile(url)
         tempTGZFile = extractZipFile(targetZipfile, newPath)
         extractTarfile(tempTGZFile, newPath)
         newsdkFolder = tempTGZFile[0:-4]
-        if args.pkg == 'binary':
+        if args.pkg == 'binary' or args.pkg == 'stress':
             compilecuPHY_binary(newsdkFolder)
         else:
             compilecuPHY_Src(newsdkFolder)

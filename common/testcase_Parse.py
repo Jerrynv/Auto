@@ -2,16 +2,20 @@
 import os
 from common.logsave import logger
 
-testcaseFileName = 'testcase/caselist.txt'
-currenWorkPath = os.getcwd()
-
-testcaseFile_path = os.path.join(currenWorkPath, testcaseFileName)
-
 def gettestcaseCmdList(testInput, args):
     bFindCase = False
     start_pos = 0
 
-    testcaseFileName = 'testcase/caselist_binary.txt' if args.pkg=='binary' else 'testcase/caselist_src.txt'
+    #testcaseFileName = 'testcase/caselist_binary.txt' if args.pkg=='binary' else 'testcase/caselist_src.txt'
+    if args.pkg == 'binary':
+        testcaseFileName = 'testcase/caselist_binary.txt'
+    elif args.pkg == 'src':
+        testcaseFileName = 'testcase/caselist_src.txt'
+    elif args.pkg == 'stress':
+        testcaseFileName = 'testcase/caselist_stress.txt'
+    else:
+        testcaseFileName = 'testcase/caselist_binary.txt'
+
 
     currenWorkPath = os.getcwd()
     testcaseFile_path = os.path.join(currenWorkPath, testcaseFileName)
