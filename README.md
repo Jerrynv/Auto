@@ -18,7 +18,7 @@ speacify the case name to run, all the cases were difined in './testcase/caselis
 speacify the case to run how much times. e.g --iter 5, default is 1, if the --duration was used, this would be take no effect  
   
 --duration, -t,  
-speacify the case to run how much time,unit is minute. e.g --duration 1, default is 0  
+speacify the case to run how much time,unit is minute. e.g --duration 1, default is 0   
   
 run the single case  
    python run.py --curan ran-sdk-abspath --case casename  
@@ -27,7 +27,7 @@ run all case
 run the case N(e.g 2,3,4,5) times  
    python run.py --curan ran-sdk-abspath --case casename --iter N  
 run the case in limted time, unit: minutes  
-   python run.py --curan ran-sdk-abspath --case casename --duration N  
+   python run.py --curan ran-sdk-abspath --case casename --duration N  -f
 
 -------------------------------------------------------------------------------------------------
 ## if don't speacify the cuda ran sdk workplace, the script will download/decompress/compile the latest version automaticly, the package was put in pkg folder.
@@ -43,8 +43,11 @@ speacify the case to run how much times. e.g --iter 5, default is 1, if the --du
 --duration, -t,  
 speacify the case to run how much time,unit is minute. e.g --duration 1, default is 0  
   
---pkg  
-speacify which package would be downloaded/decopress/compiled, the valus should be src or binary. e.g --pkg binary, default is binary     
+--pkg, -p  
+speacify which package would be downloaded/decopress/compiled, the valus should be src or binary or stress. e.g --pkg binary, default is binary  
+
+-f,   
+force to update the latest version from server  
   
 run the single case  
    python run.py --case casename --pkg src/binaly --speacify the binary or src package, default is binary  
