@@ -9,24 +9,24 @@ from common import logAnalyze
 from common.logsave import logger
 from common.testReport import CaseAnalyze, TestReport
 
-testReport = TestReport()
-
 def run_testcase(caseName, curan_path, arguementList):
     logger.info('start run the case ...\n')
 
+    testReport = TestReport()
     if caseName == 'all_case' or caseName == 'all':
-        run_allTestcase(caseName, curan_path, arguementList)
+        run_allTestcase(caseName, curan_path, arguementList, testReport)
     else:
-        run_singleTestcase(caseName, curan_path, arguementList)
+        run_singleTestcase(caseName, curan_path, arguementList, testReport)
 
     testReport.generateReport()
+    del testReport
 
-def run_singleTestcase(caseName, curan_path, arguementList):
+def run_singleTestcase(caseName, curan_path, arguementList, report):
     caseCmds = testcase_Parse.gettestcaseCmdList(caseName, arguementList)
 
-    runCases(caseCmds, curan_path, arguementList)
+    runCases(caseCmds, curan_path, arguementList, report)
 
-def runCases(caseCmds, curan_path, arguementList):
+def runCases(caseCmds, curan_path, arguementList, report):
     logger.info('casecmd={}\n'.format(caseCmds))
     casename = caseCmds[0].strip().replace('\n', '').strip().split(':')[-1].strip()
     suitename = caseCmds[0][5:]
@@ -41,12 +41,12 @@ def runCases(caseCmds, curan_path, arguementList):
         if '#' in cmd or cmd.strip() == '':
             continue
         elif suitename.split(':')[0].strip() == 'cuPHY_PUSCH_LDPC_support_multiple_code_rates_including_HARQ_rate':
-            runParticularCase_cuPHY_PUSCH_LDPC_support_multiple_code_rates_including_HARQ_rate(cmd, suitename, curan_path, tempfile, logname, arguementList.duration, arguementList.iter)
+            runParticularCase_cuPHY_PUSCH_LDPC_support_multiple_code_rates_including_HARQ_rate(cmd, suitename, curan_path, tempfile, logname, report, arguementList.duration, arguementList.iter)
         else:
             cmd = convertCmdToAbspath(cmd, curan_path, arguementList.pkg)
-            runCommandsAndSaveLog(cmd, arguementList.iter, arguementList.duration, tempfile, logname, suitename)
+            runCommandsAndSaveLog(cmd, arguementList.iter, arguementList.duration, tempfile, logname, suitename, report)
 
-def runCommandsAndSaveLog(cmd, iter_times, duration, temp_file, logname, suitename):
+def runCommandsAndSaveLog(cmd, iter_times, duration, temp_file, logname, suitename, report):
     if (duration == 0):
         logger.info('run case {} times:'.format(iter_times))
         logger.info('{}'.format(cmd))
@@ -59,7 +59,8 @@ def runCommandsAndSaveLog(cmd, iter_times, duration, temp_file, logname, suitena
     result, reason = logAnalyze.checkResultBycase(temp_file, suitename.split(':')[0].strip())
 
     caseReport = CaseAnalyze(suiteName=suitename, caseName=logname.split('-')[0], command=cmd, result=result, rltDetails=reason, logfile=logname)
-    testReport.addCaseresult(caseReport)
+    report.addCaseresult(caseReport)
+    del caseReport
 
     writelog(temp_file, 'logs/%s.txt' % logname, cmd, suitename)
     os.remove(temp_file)
@@ -95,7 +96,7 @@ def convertCmdToAbspath(cmd, curan_path, pkg='binary'):
 
     return cmd
 
-def runParticularCase_cuPHY_PUSCH_LDPC_support_multiple_code_rates_including_HARQ_rate(cmd, suitename, curan_path, tempfile, logname, duration = 0, iter_times=1):
+def runParticularCase_cuPHY_PUSCH_LDPC_support_multiple_code_rates_including_HARQ_rate(cmd, suitename, curan_path, tempfile, logname, report, duration = 0, iter_times=1):
     match = re.compile(r'\d+~\d+', re.DOTALL)
     pValue = match.findall(cmd)[0].split('~')
     pMin, pMax = int(pValue[0]), int(pValue[1])
@@ -103,7 +104,7 @@ def runParticularCase_cuPHY_PUSCH_LDPC_support_multiple_code_rates_including_HAR
     for i in range(pMin, pMax+1, 1):
         newCmd = re.sub(match, str(i), cmd)
         newCmd = convertCmdToAbspath(newCmd, curan_path)
-        runCommandsAndSaveLog(newCmd, iter_times, duration, tempfile, logname, suitename)
+        runCommandsAndSaveLog(newCmd, iter_times, duration, tempfile, logname, suitename, report)
 
 def runOneCaseAndAnalyze(cmd, curan_path):
     pass      
@@ -154,13 +155,13 @@ def writelog(srcfile, dstfile, cmds, suitename):
         f.write('*****End time {}'.format(getcurrDate()))
         f.write('\n\n')
 
-def run_allTestcase(caseName, curan_path, arguementList):
+def run_allTestcase(caseName, curan_path, arguementList, report):
     caseCmds = testcase_Parse.gettestcaseCmdList(caseName, arguementList)
 
     caselist = seperateTestcase(caseCmds)
 
     for i, case in enumerate(caselist):
-        runCases(case, curan_path, arguementList)
+        runCases(case, curan_path, arguementList, report)
 
 def seperateTestcase(allcases):
     caseNamePos = []

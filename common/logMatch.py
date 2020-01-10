@@ -10,8 +10,9 @@ def getTputList(suitename, log):
         or suitename == 'cuPHY_PUSCH_LDPC_support_multiple_code_rates_including_HARQ_rate':
         return getTputList_LDPC_Error_Correction(suitename, log)
     elif suitename == 'cuPHY_PUSCH_rx_pipeline' \
-        or suitename == 'cuPHY_PUSCH_Multi-TB_support_support':
+        or suitename == 'cuPHY_PUSCH_Multi_TB_support_support':
         return getTputList_cuPHY_PUSCH_rx_pipeline(suitename, log)
+    logger.warning('not found any tput suitename = {}, log = {}'.format(suitename, log))
 
 def getElapsedTimeList(suitename, log):
     if suitename == 'cuPHY_LDPC_Error_Correction' \
@@ -20,8 +21,9 @@ def getElapsedTimeList(suitename, log):
         or suitename == 'cuPHY_PUSCH_LDPC_support_multiple_code_rates_including_HARQ_rate':
         return getElapsedTimeList_LDPC_Error_Correction(suitename, log)
     elif suitename == 'cuPHY_PUSCH_rx_pipeline' \
-        or suitename == 'cuPHY_PUSCH_Multi-TB_support_support':
+        or suitename == 'cuPHY_PUSCH_Multi_TB_support_support':
         return getElapsedTimeList_cuPHY_PUSCH_rx_pipeline(suitename, log)
+    logger.warning('not found any time suitename = {}, log = {}'.format(suitename, log))
 
 def getErrorBitList(suitename, log):
     if suitename == 'cuPHY_LDPC_Error_Correction' \
@@ -30,9 +32,10 @@ def getErrorBitList(suitename, log):
         or suitename == 'cuPHY_PUSCH_LDPC_support_multiple_code_rates_including_HARQ_rate':
         return getErrorBitList_cuPHY_LDPC_Error_Correction(suitename, log)
     elif suitename == 'cuPHY_PUSCH_rx_pipeline' \
-        or suitename == 'cuPHY_PUSCH_Multi-TB_support_support':
+        or suitename == 'cuPHY_PUSCH_Multi_TB_support_support':
         return getErrorBitList_cuPHY_PUSCH_rx_pipeline(suitename, log)
 
+    logger.warning('not found any time suitename = {}, log = {}'.format(suitename, log))
 
 def selectTputPattern(suitename):
     if suitename == 'cuPHY_LDPC_Error_Correction' \
@@ -41,9 +44,10 @@ def selectTputPattern(suitename):
         or suitename == 'cuPHY_PUSCH_LDPC_support_multiple_code_rates_including_HARQ_rate':
         return tputMatchPattern_LDPC_Error_Correction()
     elif suitename == 'cuPHY_PUSCH_rx_pipeline' \
-        or suitename == 'cuPHY_PUSCH_Multi-TB_support_support':
+        or suitename == 'cuPHY_PUSCH_Multi_TB_support_support':
         return tputMatchPattern_cuPHY_PUSCH_rx_pipeline()
-    pass
+
+    logger.warning('not found suitable suitename = {}'.format(suitename))
 
 def selectElapsedTimePattern(suitename):
     if suitename == 'cuPHY_LDPC_Error_Correction' \
@@ -52,9 +56,10 @@ def selectElapsedTimePattern(suitename):
         or suitename == 'cuPHY_PUSCH_LDPC_support_multiple_code_rates_including_HARQ_rate':
         return elapsedTimeMatchPattern_LDPC_Error_Correction()
     elif suitename == 'cuPHY_PUSCH_rx_pipeline' \
-    	or suitename == 'cuPHY_PUSCH_Multi-TB_support_support':
+        or suitename == 'cuPHY_PUSCH_Multi_TB_support_support':
         return elapsedTimeMatchPattern_cuPHY_PUSCH_rx_pipeline()
-    pass
+
+    logger.warning('not found suitable suitename = {}'.format(suitename))
 
 def selectErrratePattern(suitename):
     if suitename == 'cuPHY_LDPC_Error_Correction' \
@@ -63,9 +68,10 @@ def selectErrratePattern(suitename):
         or suitename == 'cuPHY_PUSCH_LDPC_support_multiple_code_rates_including_HARQ_rate':
         return ErrrateMatchPattern_LDPC_Error_Correction()
     elif suitename == 'cuPHY_PUSCH_rx_pipeline' \
-        or suitename == 'cuPHY_PUSCH_Multi-TB_support_support':
-        return ErrrateMatchPattern_cuPHY_PUSCH_rx_pipeline()        
-    pass
+        or suitename == 'cuPHY_PUSCH_Multi_TB_support_support':
+        return ErrrateMatchPattern_cuPHY_PUSCH_rx_pipeline()
+
+    logger.warning('not found suitable suitename = {}'.format(suitename))
 
 
 ##### for suite LDPC_Error_Correction

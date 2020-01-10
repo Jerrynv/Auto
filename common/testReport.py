@@ -9,7 +9,7 @@ data = {'name' : ['A', 'B', 'C'],
 }
 """
 
-class CaseAnalyze():
+class CaseAnalyze(object):
     _suiteName = ''
     _caseName = ''
     _command = ''
@@ -49,7 +49,7 @@ class CaseAnalyze():
         pass
 
 
-class TestReport():
+class TestReport(object):
     caseRltList = []
 
     def __inif__(self):
