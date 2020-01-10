@@ -7,13 +7,19 @@ import re
 from common import testcase_Parse
 from common import logAnalyze
 from common.logsave import logger
+from common.testReport import CaseAnalyze, TestReport
+
+testReport = TestReport()
 
 def run_testcase(caseName, curan_path, arguementList):
     logger.info('start run the case ...\n')
+
     if caseName == 'all_case' or caseName == 'all':
         run_allTestcase(caseName, curan_path, arguementList)
     else:
         run_singleTestcase(caseName, curan_path, arguementList)
+
+    testReport.generateReport()
 
 def run_singleTestcase(caseName, curan_path, arguementList):
     caseCmds = testcase_Parse.gettestcaseCmdList(caseName, arguementList)
@@ -50,7 +56,10 @@ def runCommandsAndSaveLog(cmd, iter_times, duration, temp_file, logname, suitena
         logger.info('{}'.format(cmd))
         loopRunCommand_bytime(cmd, duration, temp_file)
 
-    logAnalyze.checkResultBycase(temp_file, suitename.split(':')[0].strip())
+    result, reason = logAnalyze.checkResultBycase(temp_file, suitename.split(':')[0].strip())
+
+    caseReport = CaseAnalyze(suiteName=suitename, caseName=logname.split('-')[0], command=cmd, result=result, rltDetails=reason, logfile=logname)
+    testReport.addCaseresult(caseReport)
 
     writelog(temp_file, 'logs/%s.txt' % logname, cmd, suitename)
     os.remove(temp_file)
@@ -81,6 +90,8 @@ def convertCmdToAbspath(cmd, curan_path, pkg='binary'):
     elif pkg == 'src':
         cmd = cmd.replace('build/', '/'.join([curan_path, 'build/']))
         cmd = cmd.replace('./testVectors', '/'.join([curan_path,'testVectors']))
+    else:
+        logger.error("error arguement pkg : {}".format(pkg))
 
     return cmd
 

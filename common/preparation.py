@@ -6,6 +6,7 @@ import os
 import sys
 import zipfile
 import tarfile
+import shutil
 from common.logsave import logger
 
 url_binary="http://scdvstransfer.nvidia.com/dvsshare/vol1/gputelecom_rel_cuda10.1_r418_Release_Ubuntu16_04_AMD64_cuda.ran.release/"
@@ -43,15 +44,29 @@ def downloadFile(url):
     pkgType, downlnk, targetFileName = getdownloadlink(url)
 
     targetFileNameAbsPath = os.path.join(os.getcwd(), targetFileName)
+    newFileFlag = False
 
-    if os.path.exists(targetFileNameAbsPath):
+    if os.path.exists(targetFileNameAbsPath) and checkzipfile(targetFileNameAbsPath) == True:
         logger.info('file %s exist, download ignore ...\n' % targetFileName)
+    elif os.path.exists(targetFileNameAbsPath) and checkzipfile(targetFileNameAbsPath) == False:
+        logger.warning('file {} is broken, download it again...\n'.format(targetFileNameAbsPath))
+        os.remove(targetFileNameAbsPath)
+        os.system('wget %s' % downlnk)
+        logger.info('download cuda ran sdk done!\n')
+        newFileFlag = True
     else:
         logger.info('start download cuda ran sdk pkgType={} ...\n'.format(pkgType))
         os.system('wget %s' % downlnk)
         logger.info('download cuda ran sdk done!\n')
+        newFileFlag = True
 
-    return pkgType, targetFileName
+    return pkgType, targetFileName, newFileFlag
+
+def checkzipfile(file_zip):
+    if zipfile.is_zipfile(file_zip):
+        with zipfile.ZipFile(file_zip) as zf:
+            return True if zf.testzip() == None else False
+    return False
 
 def getfilelist(path, filelist, endword):
     #print(path)
@@ -123,12 +138,47 @@ def  doPrepare(existsdkfolder, args, pkgFolder):
     oldPath = os.getcwd()
     newPath = os.path.join(oldPath, pkgFolder)
 
+    if args.f == True:
+        os.chdir(newPath)
+        url = url_binary if args.pkg == 'binary' or args.pkg == 'stress' else url_src
+        pkgType, targetZipfile, newFileFlag = downloadFile(url)
+
+        if newFileFlag == True and existsdkfolder != '':
+            del_file(os.path.join(newPath, existsdkfolder))
+            newsdkFolder = extractAndcompile(targetZipfile, newPath, args.pkg)
+            os.chdir(oldPath)
+            return os.path.join(newPath, newsdkFolder)
+        elif (newFileFlag == True and existsdkfolder == '') or (newFileFlag == False and existsdkfolder == ''):
+            newsdkFolder = extractAndcompile(targetZipfile, newPath, args.pkg)
+            os.chdir(oldPath)
+            return os.path.join(newPath, newsdkFolder)
+        elif newFileFlag == False and existsdkfolder != '':
+            os.chdir(oldPath)
+            return os.path.join(newPath, existsdkfolder)
+
+    if args.f == False:
+        if existsdkfolder != '':
+            return os.path.join(newPath, existsdkfolder)
+        else:
+            os.chdir(newPath)
+            url = url_binary if args.pkg == 'binary' or args.pkg == 'stress' else url_src
+            pkgType, targetZipfile, newFileFlag = downloadFile(url)
+            newsdkFolder = extractAndcompile(targetZipfile, newPath, args.pkg)
+
+            os.chdir(oldPath)
+            return os.path.join(newPath, newsdkFolder)
+    """
+    oldPath = os.getcwd()
+    newPath = os.path.join(oldPath, pkgFolder)
+
     if (existsdkfolder != ''):
         return os.path.join(newPath, existsdkfolder)
     else:
         os.chdir(newPath)
         url = url_binary if args.pkg == 'binary' or args.pkg == 'stress' else url_src
-        pkgType, targetZipfile = downloadFile(url)
+        pkgType, targetZipfile, newFileFlag = downloadFile(url)
+        if newFileFlag == True:
+
         tempTGZFile = extractZipFile(targetZipfile, newPath)
         extractTarfile(tempTGZFile, newPath)
         newsdkFolder = tempTGZFile[0:-4]
@@ -139,6 +189,30 @@ def  doPrepare(existsdkfolder, args, pkgFolder):
 
         os.chdir(oldPath)
         return os.path.join(newPath, newsdkFolder)
+        """
+def extractAndcompile(file_zip, path, pkgType):
+    tempTGZFile = extractZipFile(file_zip, path)
+    extractTarfile(tempTGZFile, path)
+    newsdkFolder = tempTGZFile[0:-4]
+    if pkgType == 'binary' or pkgType == 'stress':
+        compilecuPHY_binary(newsdkFolder)
+    else:
+        compilecuPHY_Src(newsdkFolder)
+    return newsdkFolder
+
+def del_file(path):
+    logger.debug("remove the folder={}".format(path))
+    shutil.rmtree(path, ignore_errors=True)
+    """
+    for i in os.listdir(path):
+        path_file = os.path.join(path, i)
+        if os.path.isfile(path_file):
+            os.remove(path_file)
+        else:
+            del_file(path_file)
+    os.removedirs(path)
+    """
+    return ''
 
 def doPrepare_curanbinary(folder):
     currpath = os.getcwd()
@@ -171,18 +245,4 @@ def doPrepare_curanSrc(folder):
 
 
 if __name__ == '__main__':
-    r = requests.get(url=url_binary)
-
-    pattern = re.compile(r'A HREF="\S+\.zip"', re.DOTALL)
-    downlnk = ''
-    pkgType = ''
-    match = pattern.findall(r.content)
-    for i in match[::-1]:
-        templnk = i.split('=')[-1][1:-1]
-        if templnk.endswith('.release.zip'):
-            downlnk = ''.join([prefix_url, templnk])
-            pkgType = templnk.split('.')[-3]
-            targetFileName = templnk.split('/')[-1]
-            print (targetFileName)
-            targetFileNameAbsPath = os.path.join(os.getcwd(), targetFileName)
-            print(os.path.exists(targetFileNameAbsPath))
+    del_file('/home/dgx/Jerry/test/pkg/cuda-ran-sdk.0.5/')

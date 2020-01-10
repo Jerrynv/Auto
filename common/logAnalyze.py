@@ -52,24 +52,28 @@ def checkResultBycase(logfile, suitename):
 
     err = filter(lambda x:x>0, errorBitList)
     result = ''
-    reason = ''
+    reason = '\033[0m'
     if stdev_tput<5 and stdev_elapsedTime<5 and len(err)<=0:
-        result, reason = '\033[32mPASS', '\033[0m'
+        result, reason = 'PASS', ''
     elif  stdev_tput>5:
-        result, reason = '\033[31mFAILED', '\033[0mtput avg=%s stdev=%s, %s > 5' % (avg_tput, stdevValue_tput, stdev_tput)
+        result, reason = 'FAILED', 'tput avg=%s stdev=%s, %s > 5' % (avg_tput, stdevValue_tput, stdev_tput)
     elif stdev_elapsedTime>5:
-        result, reason = '\033[31mFAILED', '\033[0melapsedtime avg=%s stdev=%s, %s > 5' % (avg_time, stdevValue_elapsedTime, stdev_elapsedTime)
+        result, reason = 'FAILED', 'elapsedtime avg=%s stdev=%s, %s > 5' % (avg_time, stdevValue_elapsedTime, stdev_elapsedTime)
     else:
-    	result, reason = '\033[31mFAILED', '\033[0mbit error'
+        result, reason = 'FAILED', 'bit error>0'
 
     #print('\n')
     logger.info('-------------------- LOG Analyze Result --------------------')
     logger.info('tput={}, avg tput={:.2f}, stdev tput={:.2f}'.format(tputlist, avg_tput, stdev_tput))
     logger.info('elapsedtime={}, avg time={:.2f}, stdev time={:.2f}'.format(elapsedtimelist, avg_time, stdev_elapsedTime)) 
     logger.info('bit error count={}'.format(errorBitList))
-    logger.info('--------------------------------------------------------{} {}\n'.format(result, reason))
+    if result == 'PASS':
+        logger.info('--------------------------------------------------------\033[32m{} \033[0m{}\n'.format(result, reason))
+    else:
+        logger.info('--------------------------------------------------------\033[31m{} \033[0m{}\n'.format(result, reason))
     #logger.debug('\033[0m')
     #print('------------------------------------------------------------')
+    return result, reason
 
 def getsuiteNameAndLog(logfile):
     suitename = ''

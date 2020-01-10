@@ -1,6 +1,7 @@
 # -*- coding: UTF-8 -*-
 import os
 import logging
+import shutil
 from common import commandLine_parse
 from common import testcase_Parse
 from common import testcase_Run
