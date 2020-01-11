@@ -12,6 +12,7 @@ def getTputList(suitename, log):
     elif suitename == 'cuPHY_PUSCH_rx_pipeline' \
         or suitename == 'cuPHY_PUSCH_Multi_TB_support_support':
         return getTputList_cuPHY_PUSCH_rx_pipeline(suitename, log)
+
     logger.warning('not found any tput suitename = {}, log = {}'.format(suitename, log))
 
 def getElapsedTimeList(suitename, log):
@@ -175,4 +176,111 @@ def getErrorBitList_cuPHY_PUSCH_rx_pipeline(suitename, log):
             errorBit = i.split(' ')[-1]
             errBitList.append(float(errorBit))
     return errBitList
+
+def check_AnalyzeResult_bySuite(stdev_tput, stdev_elapsedTime, errorBitcount):
+    result, reason = 'PASS', ''
+    if stdev_tput >= 5:
+        result, reason = 'FAILED', 'stdev tput >= 5'
+    elif stdev_elapsedTime >= 5:
+        result, reason = 'FAILED', 'stdev elapsed time >= 5'
+    elif len(errorBitcount) > 0:
+        result, reason = 'FAILED', 'error bit count > 0'
+    else:
+        result, reason = 'PASS', ''
+
+    return result, reason
 ##### for suite uPHY_PUSCH_rx_pipeline
+
+
+##### cuPHY_PDSCH_pipeline_integration
+"""
+Running DL pipeline once w/ reference checks enabled
+
+CRC Error Count: 0; GPU output compared w/ reference dataset <tb_cbs> from </home/dgx/Jerry/test/pkg/cuda-ran-sdk.0.5/testVectors/TV_cuphy_pdsch-default_snrdb40.00_iter1_MIMO8x8_PRB272_DataSyms12_qam256.h5>
+
+LDPC Error Count: 0; GPU output compared w/ reference dataset <tb_codedcbs> from </home/dgx/Jerry/test/pkg/cuda-ran-sdk.0.5/testVectors/TV_cuphy_pdsch-default_snrdb40.00_iter1_MIMO8x8_PRB272_DataSyms12_qam256.h5>
+
+Rate Matching Error Count: 0; GPU output compared w/ reference dataset <tb_scramcbs> from </home/dgx/Jerry/test/pkg/cuda-ran-sdk.0.5/testVectors/TV_cuphy_pdsch-default_snrdb40.00_iter1_MIMO8x8_PRB272_DataSyms12_qam256.h5>
+
+Modulation Mapper: Found 0 mismatched QAM symbols out of 39168
+GPU output compared w/ reference dataset <tb_qams> from </home/dgx/Jerry/test/pkg/cuda-ran-sdk.0.5/testVectors/TV_cuphy_pdsch-default_snrdb40.00_iter1_MIMO8x8_PRB272_DataSyms12_qam256.h5>
+
+Timing the DL pipeline
+- NB: Allocations not included. Ref. checks will fail!
+
+DL pipeline: 96.59 us (avg. over 100 iterations)
+"""
+def getCRCErrorCount_PDSCH_pipeline(log):
+    crcErrorCount = []
+    pattern = re.compile(r'CRC Error Count: \d+', re.DOTALL)
+
+    match = pattern.findall(log)
+    if match:
+        for i in match:
+            crcError = i.split(' ')[-1]
+            crcErrorCount.append(float(crcError))
+    return crcErrorCount
+
+def getLDPCErrorCount_PDSCH_pipeline(log):
+    ldpcErrorCount = []
+    pattern = re.compile(r'LDPC Error Count: \d+', re.DOTALL)
+
+    match = pattern.findall(log)
+    if match:
+        for i in match:
+            ldpcError = i.split(' ')[-1]
+            ldpcErrorCount.append(float(ldpcError))
+    return ldpcErrorCount
+
+def getRateMatchErrorCount_PDSCH_pipeline(log):
+    rateMatchErrorCount = []
+    pattern = re.compile(r'Rate Matching Error Count: \d+', re.DOTALL)
+
+    match = pattern.findall(log)
+    if match:
+        for i in match:
+            rateMatch = i.split(' ')[-1]
+            rateMatchErrorCount.append(float(rateMatch))
+    return rateMatchErrorCount
+
+def getMismatchCount_PDSCH_pipeline(log):
+    misMatchCount = []
+    pattern = re.compile(r'Modulation Mapper: Found \d+', re.DOTALL)
+
+    match = pattern.findall(log)
+    if match:
+        for i in match:
+            misMatch = i.split(' ')[-1]
+            misMatchCount.append(float(misMatch))
+    return misMatchCount
+
+def getelapseTime_PDSCH_pipeline(log):
+    elapsedTimeCount = []
+    pattern = re.compile(r'DL pipeline: \d+\.\d+ us', re.DOTALL)
+
+    match = pattern.findall(log)
+    if match:
+        for i in match:
+            elapsedTime = i.split(' ')[-2]
+            elapsedTimeCount.append(float(elapsedTime))
+    return elapsedTimeCount
+
+def check_PDSCH_pipe_AnalyzeResult(errCrc, errLDPC, errRateMatch, errMisMatch, stdev_elapsedTime):
+    result, reason = 'PASS', ''
+    #if len(errCrc)==0 and len(errLDPC)==0 and len(errRateMatch)==0 and len(errMisMatch)==0 and stdev_elapsedTime<5:
+    if len(errCrc) > 0:
+        result, reason = 'FAILED', 'crc error count > 0'
+    elif len(errLDPC) > 0:
+        result, reason = 'FAILED', 'LDPC error count > 0'
+    elif len(errRateMatch) > 0:
+        result, reason = 'FAILED', 'rate match error count > 0'
+    elif len(errMisMatch) > 0:
+        result, reason = 'FAILED', 'mismatch > 0'
+    elif stdev_elapsedTime >= 5:
+        result, reason = 'FAILED', 'the elapsed time stdev >= 5'
+    else:
+        result, reason = 'PASS', ''
+    return result, reason
+##### cuPHY_PDSCH_pipeline_integration
+
+

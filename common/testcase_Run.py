@@ -29,7 +29,7 @@ def run_singleTestcase(caseName, curan_path, arguementList, report):
 def runCases(caseCmds, curan_path, arguementList, report):
     logger.info('casecmd={}\n'.format(caseCmds))
     casename = caseCmds[0].strip().replace('\n', '').strip().split(':')[-1].strip()
-    suitename = caseCmds[0][5:]
+    suitename = caseCmds[0][5:].split(':')[0].strip()
 
     logname = '-'.join([casename, getcurrDate()])
 
@@ -40,7 +40,7 @@ def runCases(caseCmds, curan_path, arguementList, report):
     for cmd in caseCmds:
         if '#' in cmd or cmd.strip() == '':
             continue
-        elif suitename.split(':')[0].strip() == 'cuPHY_PUSCH_LDPC_support_multiple_code_rates_including_HARQ_rate':
+        elif suitename== 'cuPHY_PUSCH_LDPC_support_multiple_code_rates_including_HARQ_rate':
             runParticularCase_cuPHY_PUSCH_LDPC_support_multiple_code_rates_including_HARQ_rate(cmd, suitename, curan_path, tempfile, logname, report, arguementList.duration, arguementList.iter)
         else:
             cmd = convertCmdToAbspath(cmd, curan_path, arguementList.pkg)
@@ -56,7 +56,8 @@ def runCommandsAndSaveLog(cmd, iter_times, duration, temp_file, logname, suitena
         logger.info('{}'.format(cmd))
         loopRunCommand_bytime(cmd, duration, temp_file)
 
-    result, reason = logAnalyze.checkResultBycase(temp_file, suitename.split(':')[0].strip())
+    #result, reason = logAnalyze.checkResultBycase(temp_file, suitename.split(':')[0].strip())
+    result, reason = logAnalyze.checkResult(temp_file, suitename)
 
     caseReport = CaseAnalyze(suiteName=suitename, caseName=logname.split('-')[0], command=cmd, result=result, rltDetails=reason, logfile=logname)
     report.addCaseresult(caseReport)

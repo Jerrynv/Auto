@@ -5,35 +5,97 @@ import logging
 from common import logMatch
 from common.logsave import logger
 
-def checkResult(logfile):
-    suitename, logContent = getsuiteNameAndLog(logfile)
+def checkResult(logfile, suitename):
+    logger.debug('log file : {}. suitename={}'.format(logfile, suitename))
+    logContent = getLogContent(logfile)
+    result, reason = 'PASS', ''
+
     if suitename == 'cuPHY_LDPC_Error_Correction' or \
-       suitename == 'cuPHY_PUSCH_rx_pipeline':
+       suitename == 'cuPHY_PUSCH_rx_pipeline' or \
+       suitename == 'cuPHY_ldpc_decode_perf' or \
+       suitename == 'cuPHY_PUSCH_rx_pipeline' or \
+       suitename == 'cuPHY_LDPC_Error_Correction' or \
+       suitename == 'cuPHY_PUSCH_LDPC_supported_code_block_sizes_BG1_BG2' or \
+       suitename == 'cuPHY_PUSCH_LDPC_support_multiple_code_rates_including_HARQ_rate' or \
+       suitename == 'cuPHY_PUSCH_Multi_TB_support_support':
         """
         check tput stddev < 5%
         check elapsedtime stddev < 5%
         check bit error count = 0
         """
-        tputlist = logMatch.getTputList(suitename, logContent)
-        elapsedtimelist = logMatch.getElapsedTimeList(suitename, logContent)
-        errorBitList = logMatch.getErrorBitList(suitename, logContent)
-        avg_tput, stdevValue_tput, stdev_tput = calcStandardEv(tputlist)
-        avg_time, stdevValue_elapsedTime, stdev_elapsedTime = calcStandardEv(elapsedtimelist)
+        #result, reason = checkResultBycase(logContent, suitename)
+        result, reason = analyze_bySuite(suitename, logContent)
 
-        print(errorBitList)
-
-    elif suitename == 'cuPHY_PUSCH_rx_pipeline':
+    elif suitename == 'cuPHY_PDSCH_pipeline_integration':
         """
-        check tput stddev < 5%
-        check elapsedtime stddev < 5%
-        check  Block Error Rate = 0
+        CRC Error Count == 0
+        LDPC Error Count == 0
+        Rate Matching Error Count == 0
+        0 mismatched QAM symbols
+        DL pipeline: 96.59 us
         """
-    pass
+        result, reason = analyze_cuPHY_PDSCH_pipeline_integration(logContent)
+    else:
+        logger.warning('don\'t the suitename : {} log analyze, need more script support!'.format(suitename))
 
-def checkResultBycase(logfile, suitename):
-    logContent = ''
-    with open(logfile, 'r') as f:
-        logContent = f.read()
+    return result, reason
+
+def analyze_cuPHY_PDSCH_pipeline_integration(logContent):
+    crcErrorCount = logMatch.getCRCErrorCount_PDSCH_pipeline(logContent)
+    ldpcErrorCount = logMatch.getLDPCErrorCount_PDSCH_pipeline(logContent)
+    rateMatchErrorCount = logMatch.getRateMatchErrorCount_PDSCH_pipeline(logContent)
+    mismatchErrorCount = logMatch.getMismatchCount_PDSCH_pipeline(logContent)
+    elapsedtimelist = logMatch.getelapseTime_PDSCH_pipeline(logContent)
+
+    errCrc = filter(lambda x:x>0, crcErrorCount)
+    errLDPC = filter(lambda x:x>0, ldpcErrorCount)
+    errRateMatch = filter(lambda x:x>0, rateMatchErrorCount)
+    errMisMatch = filter(lambda x:x>0, mismatchErrorCount)
+    avg_time, stdevValue_elapsedTime, stdev_elapsedTime= calcStandardEv(elapsedtimelist)
+
+    result, reason = logMatch.check_PDSCH_pipe_AnalyzeResult(errCrc, errLDPC, errRateMatch, errMisMatch, stdev_elapsedTime)
+    if len(elapsedtimelist) == 0:
+        result, reason = 'FAILED', 'the data is 0'
+
+    logger.info('-------------------- LOG Analyze Result --------------------')
+    logger.info('crcErrorCount={}'.format(crcErrorCount))
+    logger.info('ldpcErrorCount={}'.format(ldpcErrorCount))
+    logger.info('rateMatchErrorCount={}'.format(rateMatchErrorCount))
+    logger.info('mismatchErrorCount={}'.format(mismatchErrorCount))
+    logger.info('elapsedtime={}, avg time={:.2f}, stdev time={:.2f}'.format(elapsedtimelist, avg_time, stdev_elapsedTime))
+
+    if result == 'PASS':
+        logger.info('--------------------------------------------------------\033[32m{} \033[0m{}\n'.format(result, reason))
+    else:
+        logger.info('--------------------------------------------------------\033[31m{} \033[0m{}\n'.format(result, reason))
+
+    return result, reason
+
+def analyze_bySuite(suitename, logContent):
+    tputlist = logMatch.getTputList(suitename, logContent)
+    elapsedtimelist = logMatch.getElapsedTimeList(suitename, logContent)
+    errorBitList = logMatch.getErrorBitList(suitename, logContent)
+
+    avg_tput, stdevValue_tput, stdev_tput = calcStandardEv(tputlist)
+    avg_time, stdevValue_elapsedTime, stdev_elapsedTime = calcStandardEv(elapsedtimelist)
+    errorBitcount = filter(lambda x:x>0, errorBitList)
+
+    result, reason = logMatch.check_AnalyzeResult_bySuite(stdev_tput, stdev_elapsedTime, errorBitcount)
+    if len(tputlist) == 0 or len(elapsedtimelist) == 0 or len(errorBitList) == 0:
+        result, reason = 'FAILED', 'the data is 0'
+
+    logger.info('-------------------- LOG Analyze Result --------------------')
+    logger.info('tput={}, avg tput={:.2f}, stdev tput={:.2f}'.format(tputlist, avg_tput, stdev_tput))
+    logger.info('elapsedtime={}, avg time={:.2f}, stdev time={:.2f}'.format(elapsedtimelist, avg_time, stdev_elapsedTime))
+    logger.info('bit error count={}'.format(errorBitList))
+    if result == 'PASS':
+        logger.info('--------------------------------------------------------\033[32m{} \033[0m{}\n'.format(result, reason))
+    else:
+        logger.info('--------------------------------------------------------\033[31m{} \033[0m{}\n'.format(result, reason))
+
+    return result, reason
+
+def checkResultBycase(logContent, suitename):
     tputlist = logMatch.getTputList(suitename, logContent)
     elapsedtimelist = logMatch.getElapsedTimeList(suitename, logContent)
     errorBitList = logMatch.getErrorBitList(suitename, logContent)
@@ -41,7 +103,7 @@ def checkResultBycase(logfile, suitename):
     if len(tputlist) == 0 or len(elapsedtimelist) ==0:
         logger.info('-------------------- LOG Analyze Result --------------------')
         logger.info('------------------------------------------------------FAILED')
-        return
+        return 'FAILED', ''
     avg_tput, stdevValue_tput, stdev_tput = calcStandardEv(tputlist)
     logger.debug('tputlist={}'.format(tputlist))
     logger.debug("avg tput={}, stdev_tput={}".format(avg_tput, stdev_tput))
@@ -75,22 +137,22 @@ def checkResultBycase(logfile, suitename):
     #print('------------------------------------------------------------')
     return result, reason
 
-def getsuiteNameAndLog(logfile):
-    suitename = ''
+def getLogContent(logfile):
     logContent = ''
     with open(logfile, 'r') as f:
         logContent = f.read()
-        f.seek(0,0)
-        suitename = f.readlines()[2].split(':')[0].strip().split(' ')[1]
 
-    return suitename, logContent
-
+    return logContent
 
 ###
 
 def calcStandardEv(datalist): #mean squared error
     total = 0.0
     count = len(datalist)
+    if count == 0:
+        logger.error('the data list len is 0')
+        return 0, 0, 0
+
     for i, data in enumerate(datalist):
         total += data
 
