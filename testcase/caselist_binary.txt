@@ -125,12 +125,13 @@ sudo build/examples/pusch_rx_multi_pipe/cuphy_ex_pusch_rx_multi_pipe -i ./testVe
 sudo build/examples/pusch_rx_multi_pipe/cuphy_ex_pusch_rx_multi_pipe -i ./testVectors/TV_cuphy_perf-pusch-TC285_snrdb40.00_iter1_MIMO8x16_PRB272_DataSyms10_qam16.h5
 
 #####cuPHY_PUCCH_Format_1_complete : cuPHY_PUCCH_Format_1_complete
-#build/examples/pucch_receiver/pucch_receiver ./testVectors/last_TC1_pucch.h5 100
-#build/examples/pucch_receiver/pucch_receiver ./testVectors/last_TC2_pucch.h5 100
-#build/examples/pucch_receiver/pucch_receiver ./testVectors/last_TC3_pucch.h5 100
-#build/examples/pucch_receiver/pucch_receiver ./testVectors/last_TC4_pucch.h5 100
-#build/examples/pucch_receiver/pucch_receiver ./testVectors/last_TC5_pucch.h5 100
-#build/examples/pucch_receiver/pucch_receiver ./testVectors/last_TC6_pucch.h5 100
+build/examples/pucch_receiver/pucch_receiver ./testVectors/pucch-TC1.h5 100
+build/examples/pucch_receiver/pucch_receiver ./testVectors/last_TC1_pucch.h5 100
+build/examples/pucch_receiver/pucch_receiver ./testVectors/last_TC2_pucch.h5 100
+build/examples/pucch_receiver/pucch_receiver ./testVectors/last_TC3_pucch.h5 100
+build/examples/pucch_receiver/pucch_receiver ./testVectors/last_TC4_pucch.h5 100
+build/examples/pucch_receiver/pucch_receiver ./testVectors/last_TC5_pucch.h5 100
+build/examples/pucch_receiver/pucch_receiver ./testVectors/last_TC6_pucch.h5 100
 
 #####cuPHY_PDSCH_pipeline_integration : cuPHY_PDSCH_pipeline_integration
 build/examples/pdsch_tx/cuphy_ex_pdsch_tx ./testVectors/TV_cuphy_pdsch-default_snrdb40.00_iter1_MIMO8x8_PRB272_DataSyms12_qam256.h5  100
@@ -138,8 +139,9 @@ build/examples/pdsch_tx/cuphy_ex_pdsch_tx ./testVectors/TV_cuphy_pdsch-default_s
 #####cuPHY_PDSCH_Modulation(symbol_mapping) : cuPHY_PDSCH_Modulation(symbol_mapping) 
 #build/examples/modulation_mapper/modulation_mapper ./testVectors/TV_cuphy_pdsch-default_snrdb40.00_iter1_MIMO8x8_PRB272_DataSyms12_qam256.h5 100
 
-
-
+#####PDCCH_Tx_Pipeline : PDCCH_Tx_Pipeline
+build/examples/pdcch/embed_pdcch_tf_signal ./testVectors/TV_cuphy_pdcch1.h5
+build/examples/pdcch/embed_pdcch_tf_signal ./testVectors/TV_cuphy_pdcch2.h5
 
 ##### End
 

@@ -35,8 +35,54 @@ def checkResult(logfile, suitename):
         DL pipeline: 96.59 us
         """
         result, reason = analyze_cuPHY_PDSCH_pipeline_integration(logContent)
+    elif suitename == 'cuPHY_PUCCH_Format_1_complete':
+        result, reason = analyze_cuPHY_PUCCH_Format_1_complete(logContent)
+    elif suitename == 'PDCCH_Tx_Pipeline':
+        result, reason = analyze_PDCCH_Tx_Pipeline(logContent)
     else:
         logger.warning('don\'t the suitename : {} log analyze, need more script support!'.format(suitename))
+
+    return result, reason
+
+def analyze_PDCCH_Tx_Pipeline(logContent):
+    mismatchErrorCount = logMatch.getmisMatch_PDCCH_Tx_Pipeline(logContent)
+    logger.info('-------------------- LOG Analyze Result --------------------')
+    logger.info('mismatchErrorCount={}'.format(mismatchErrorCount))
+    errMisMatch = filter(lambda x:x>0, mismatchErrorCount)
+
+    result, reason = 'PASS', ''
+    if len(mismatchErrorCount) == 0:
+        result, reason = 'FAILED', 'the data is 0'
+    if len(errMisMatch) > 0:
+        result, reason = 'FAILED', 'mismatch count > 0'
+
+    if result == 'PASS':
+        logger.info('--------------------------------------------------------\033[32m{} \033[0m{}\n'.format(result, reason))
+    else:
+        logger.info('--------------------------------------------------------\033[31m{} \033[0m{}\n'.format(result, reason))
+
+    return result, reason
+
+def analyze_cuPHY_PUCCH_Format_1_complete(logContent):
+    mismatchErrorCount = logMatch.getmisMatch_cuPHY_PUCCH_Format_1_complete(logContent)
+    elapsedtimelist = logMatch.getelapseTime_cuPHY_PUCCH_Format_1_complete(logContent)
+
+    errMisMatch = filter(lambda x:x>0, mismatchErrorCount)
+    avg_time, stdevValue_elapsedTime, stdev_elapsedTime= calcStandardEv(elapsedtimelist)
+
+    result, reason = logMatch.check_cuPHY_PUCCH_Format_1_complete(errMisMatch, stdev_elapsedTime)
+    logger.info('-------------------- LOG Analyze Result --------------------')
+    logger.info('mismatchErrorCount={}'.format(mismatchErrorCount))
+    logger.info('elapsedtimelist={}'.format(elapsedtimelist))
+    logger.info('elapsedtime={}, avg time={:.2f}, stdev time={:.2f}'.format(elapsedtimelist, avg_time, stdev_elapsedTime))
+
+    if len(elapsedtimelist) == 0:
+        result, reason = 'FAILED', 'the data is 0'
+
+    if result == 'PASS':
+        logger.info('--------------------------------------------------------\033[32m{} \033[0m{}\n'.format(result, reason))
+    else:
+        logger.info('--------------------------------------------------------\033[31m{} \033[0m{}\n'.format(result, reason))
 
     return result, reason
 

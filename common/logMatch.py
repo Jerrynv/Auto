@@ -283,4 +283,83 @@ def check_PDSCH_pipe_AnalyzeResult(errCrc, errLDPC, errRateMatch, errMisMatch, s
     return result, reason
 ##### cuPHY_PDSCH_pipeline_integration
 
+##### cuPHY_PUCCH_Format_1_complete
+"""
+PUCCH Receiver Kernels: 56.57 us (avg. over 100 iterations)
+Dataset Y_data_after_step3: 0 mismatches out of 1344 elements.
+Dataset Y_dmrs_after_step3: 0 mismatches out of 1344 elements.
+Compared bit_estimates & qam_sums w/ matlab. Found 0 and 0 mismatches respectively.
 
+Compared bit_estimates & qam_sums w/ matlab. Found 2 and 2 mismatches respectively
+"""
+def getmisMatch_cuPHY_PUCCH_Format_1_complete(log):
+    misMatchCount = []
+    pattern = re.compile(r'\d+ mismatches', re.DOTALL)
+
+    match = pattern.findall(log)
+    if match:
+        for i in match:
+            misMatch = i.split(' ')[0]
+            misMatchCount.append(float(misMatch))
+    return misMatchCount
+
+def getelapseTime_cuPHY_PUCCH_Format_1_complete(log):
+    elapsedTimeCount = []
+    pattern = re.compile(r'PUCCH Receiver Kernels: \d+\.\d+ us', re.DOTALL)
+
+    match = pattern.findall(log)
+    if match:
+        for i in match:
+            elapsedTime = i.split(' ')[-2]
+            elapsedTimeCount.append(float(elapsedTime))
+    return elapsedTimeCount
+
+def check_cuPHY_PUCCH_Format_1_complete(errMisMatch, stdev_elapsedTime):
+    result, reason = 'PASS', ''
+
+    if stdev_elapsedTime >= 5:
+        result, reason = 'FAILED', 'stdev elapsed time >= 5'
+    elif len(errMisMatch) > 0:
+        result, reason = 'FAILED', 'mismatch count > 0'
+    else:
+        result, reason = 'PASS', ''
+
+    return result, reason
+#####cuPHY_PUCCH_Format_1_complete
+
+##### PDCCH_Tx_Pipeline
+"""
+PDCCH parameters....
+ n_f: 3276
+ n_t: 14
+ slot_number: 13
+ start_rb: 54
+ n_rb: 12
+ start_sym: 0
+ n_sym: 1
+ dmrs_id: 41
+ beta_qam: 1.000
+ beta_dmrs: 1.000
+ qam_payload addr: 0x7f765a42ce00
+Run cuphyPdcchTfSignal...
+Check Correctness....
+# qam mismatch: 0 # dmrs mismatch: 0 # other: 0
+"""
+def getmisMatch_PDCCH_Tx_Pipeline(log):
+    misMatchCount = []
+    pattern = re.compile(r'mismatch: \d+', re.DOTALL)
+
+    match = pattern.findall(log)
+    if match:
+        for i in match:
+            misMatch = i.split(' ')[-1]
+            misMatchCount.append(float(misMatch))
+
+    pattern = re.compile(r'other: \d+', re.DOTALL)
+    match = pattern.findall(log)
+    if match:
+        for i in match:
+            misMatch = i.split(' ')[-1]
+            misMatchCount.append(float(misMatch))
+    return misMatchCount
+#####PDCCH_Tx_Pipeline
