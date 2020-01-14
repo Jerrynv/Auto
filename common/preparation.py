@@ -198,6 +198,11 @@ def extractAndcompile(file_zip, path, pkgType):
         compilecuPHY_binary(newsdkFolder)
     else:
         compilecuPHY_Src(newsdkFolder)
+
+    tvFolder = os.path.join(os.path.join(os.getcwd(), newsdkFolder), 'testVectors')
+    logger.info("JJJJJ={}".format(tvFolder))
+    os.system('cp ../private_TV/* %s' % tvFolder)
+
     return newsdkFolder
 
 def del_file(path):

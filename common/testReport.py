@@ -1,5 +1,6 @@
 # -*- coding: utf-8 -*-
 import os
+import datetime
 from pandas import DataFrame
 from common.logsave import logger
 """
@@ -65,7 +66,7 @@ class TestReport(object):
         #for i, report in enumerate(caseRltList):
         #    print(report)
         #print("report len={}".format(len(self.caseRltList)))
-        reportfile = 'report.xlsx'
+        reportfile = 'report-%s.xlsx' % datetime.datetime.now().strftime('%Y-%m-%d-%H:%M:%S')
 
         suiteNameList = []
         caseNameList = []
